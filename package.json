@@ -2,7 +2,7 @@
   "name": "primeiro-app-nestjs",
   "version": "0.0.1",
   "description": "Meus estudos sobre o framework NestJS",
-  "author": "Cauã sOARES",
+  "author": "Cauã Soares",
   "private": true,
   "license": "ISC",
   "scripts": {
