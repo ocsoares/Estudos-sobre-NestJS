@@ -11,6 +11,7 @@
         "prettier"
     ],
     "extends": [
+        "prettier",
         "plugin:@typescript-eslint/recommended",
         "plugin:prettier/recommended"
     ],
@@ -27,6 +28,8 @@
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
+        "linebreak-style": "off",
+        "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": false }],
         "@typescript-eslint/naming-convention": [
             "error",
             {
