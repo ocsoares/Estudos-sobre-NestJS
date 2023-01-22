@@ -25,6 +25,7 @@
     ],
     "rules": {
         // "prettier/prettier": "off",
+        "prefer-template":"error",
         "prettier/prettier": ["error", { "endOfLine": "auto" }],
         "prefer-destructuring": ["error", {
             "array": true,
