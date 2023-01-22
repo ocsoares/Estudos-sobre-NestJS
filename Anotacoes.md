@@ -2,7 +2,16 @@
 
 <br>
 
-Gerar um Módulo = nest g resource module + NOME
+Atalhos:
+g = generate
+co = controller
+s = service
+
+Gerar um Módulo = nest g module + NOME
+Fazer as validações de caso de uso nos Services !!
+
+Para criar um Controller dentro de uma pasta de Módulo = nest g co NOME_CONTROLLER + NOME_MÓDULO
+Para criar um Service para esse Controller = nest g s NOME_CONTROLLER + NOME_MÓDULO
 
 <br>
 
