@@ -7,13 +7,13 @@
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint/eslint-plugin",
-        "prettier"
+        "@typescript-eslint/eslint-plugin"
     ],
     "extends": [
         "plugin:@typescript-eslint/recommended",
-        "plugin:prettier/recommended",
-        "prettier"
+        "plugin:prettier/recommended"
+        // "airbnb-base",
+        // "airbnb-typescript/base"
     ],
     "root": true,
     "env": {
