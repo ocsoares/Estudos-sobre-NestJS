@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { UserRepository } from 'src/repositories/abstracts/UserRepository';
-import { ICreateUserBody } from './dtos/ICreateUserBody';
+import { CreateUserBody } from './dtos/CreateUserBody';
 
 // Essa Classe RECEBE no seu constructor os métodos do Banco de Dados por contrato (UserRepository) e
 // essa classe será Injetada no constructor do Controller !!
@@ -17,7 +17,7 @@ import { ICreateUserBody } from './dtos/ICreateUserBody';
 export class CreateUserService implements IService {
     constructor(private readonly _createUserRepository: UserRepository) {}
 
-    async execute(data: ICreateUserBody) {
+    async execute(data: CreateUserBody) {
         const createUser = await this._createUserRepository.create(data);
 
         return createUser;
