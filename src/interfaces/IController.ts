@@ -3,9 +3,11 @@ export interface returnHandle {
     data: object;
 }
 
-// NÃO precisa passar NADA no handle porque ele NÃO precisa receber Request e Response,
-// isso o Nest faz AUTOMATICAMENTE com os Decorators (ex. @Get() ) !!
+// NÃO precisa passar o Request e Response no handle porque isso o Nest faz AUTOMATICAMENTE !!
+// OBS: Deixei o dataNestDecorator como opcional porque vai ter Rotas que vão precisar e outras
+// não, por exemplo, retornar TODOS os Dados de algo, e object porque precisa Receber uma
+// Interface (DTO) !!
 
 export interface IController {
-    handle(body?: object): Promise<returnHandle>;
+    handle(dataNestDecorator?: object): Promise<returnHandle>;
 }

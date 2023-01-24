@@ -1,3 +1,3 @@
 export interface IService {
-    execute(data: any): Promise<object>;
+    execute(data?: string | object): Promise<object>;
 }
