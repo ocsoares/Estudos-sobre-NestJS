@@ -4,16 +4,12 @@ import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 // OBS: Esses Decorators podem ter várias customizações, como por exemplo, mudar a Mensagem de Erro !!
 
 export class CreateUserBody {
-    @IsNotEmpty({
-        message: 'O campo username não pode ser vazio !',
-    })
+    @IsNotEmpty({ message: 'O campo username não pode ser vazio !' })
     @IsString()
     username: string;
 
     @IsNotEmpty()
-    @IsEmail(undefined, {
-        message: 'Insira um email válido !',
-    })
+    @IsEmail(undefined, { message: 'Insira um email válido !' })
     email: string;
 
     @IsNotEmpty()
