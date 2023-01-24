@@ -6,6 +6,7 @@ Atalhos:
 g = generate
 co = controller
 s = service
+cl = class
 
 Gerar um Módulo = nest g module + NOME
 Fazer as validações de caso de uso nos Services !!
