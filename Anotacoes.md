@@ -14,6 +14,8 @@ Fazer as validações de caso de uso nos Services !!
 Para criar um Controller dentro de uma pasta de Módulo = nest g co NOME_CONTROLLER + NOME_MÓDULO
 Para criar um Service para esse Controller = nest g s NOME_CONTROLLER + NOME_MÓDULO
 
+Para criar Algo em uma determinada Pasta = nest g ALGO + caminhoDoArquivo/NOME desse Algo
+
 <br>
 
 ## Outros
