@@ -1,6 +1,6 @@
 export interface returnHandle {
     message: string;
-    data: object;
+    data: object | object[];
 }
 
 // NÃO precisa passar o Request e Response no handle porque isso o Nest faz AUTOMATICAMENTE !!
