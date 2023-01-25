@@ -6,8 +6,8 @@ import { PORT } from './config/app';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    app.setGlobalPrefix('api');
-    app.useGlobalPipes(new ValidationPipe());
+    app.setGlobalPrefix('api'); // Todas os Controllers dessa aplicação INTEIRA vai começar com /api !!
+    app.useGlobalPipes(new ValidationPipe()); // Habilita as Verificações do Body da Aplicação !!
 
     await app.listen(PORT);
 }
