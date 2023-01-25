@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -9,6 +10,7 @@ import { UserModule } from './user/user.module';
             isGlobal: true, // Para TODO o Aplicativo (todos Controllers, Services, etc...)
             envFilePath: '.env', // Nome do Arquivo .env
         }),
+        MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
         UserModule,
     ],
     controllers: [],
