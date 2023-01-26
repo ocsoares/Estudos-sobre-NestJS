@@ -8,8 +8,8 @@ async function bootstrap() {
 
     app.setGlobalPrefix('api'); // Todas os Controllers dessa aplicação INTEIRA vai começar com /api !!
 
+    // Habilita as Verificações do Body da Aplicação !!
     app.useGlobalPipes(
-        // Habilita as Verificações do Body da Aplicação !!
         new ValidationPipe({
             whitelist: true, // NÃO permite passar mais Campos no Body do que o Solicitado !
             forbidNonWhitelisted: true, // Passa um ERRO caso tenha um Campo não solicitado (erro para o whitelist acima) !

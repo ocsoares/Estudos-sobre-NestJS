@@ -13,11 +13,30 @@ export class MongooseUserRepository implements UserRepository {
         @InjectModel(User.name) private _userModel: Model<UserDocument>,
     ) {}
 
+    // IUser pq ele tem Id como opcional, e preciso dele para Verificar se o Usuário JÁ existe !!
     async create(data: IUser): Promise<IUser> {
         const newUser = new this._userModel(data);
 
         await newUser.save();
 
         return newUser;
+    }
+
+    async findById(id: string): Promise<IUser> {
+        const user = await this._userModel.findById(id);
+
+        return user;
+    }
+
+    async findByName(name: string): Promise<IUser> {
+        const user = await this._userModel.findOne({ name });
+
+        return user;
+    }
+
+    async findByEmail(email: string): Promise<IUser> {
+        const user = await this._userModel.findOne({ email });
+
+        return user;
     }
 }

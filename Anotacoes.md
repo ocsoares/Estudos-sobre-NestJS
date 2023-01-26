@@ -16,6 +16,8 @@ Para criar um Service para esse Controller = nest g s NOME_CONTROLLER + NOME_MÓ
 
 Para criar Algo em uma determinada Pasta = nest g ALGO + caminhoDoArquivo/NOME desse Algo
 
+Para o Tratamento de Erros, usar os Exceptions do próprio Nest, exemplo: BadRequestException, ForbiddenException, HttpException, etc...
+
 <br>
 
 ## Outros
