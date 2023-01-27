@@ -1,17 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { IUser } from 'src/models/IUser';
-import { UserRepository } from '../../repositories/abstracts/UserRepository';
-
-// Essa Classe RECEBE no seu constructor os métodos do Banco de Dados por contrato (UserRepository) e
-// essa classe será Injetada no constructor do Controller !!
-
-// OBS: PRECISA Injetar algum Banco de Dados nesse Repositório (UserRepository) no MÓDULO responsável por
-// ESSA Pasta e em providers:
-// {
-//     provide: Repositório de CONTRATO com os Métodos,
-//     useClass: Repositório do Banco de Dados REAL
-// }
+import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 
 @Injectable()
 export class CreateUserService implements IService {
