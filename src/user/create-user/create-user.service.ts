@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { IUser } from 'src/models/IUser';
-import { UserRepository } from 'src/repositories/abstracts/UserRepository';
+import { UserRepository } from '../../repositories/abstracts/UserRepository';
 
 // Essa Classe RECEBE no seu constructor os métodos do Banco de Dados por contrato (UserRepository) e
 // essa classe será Injetada no constructor do Controller !!
