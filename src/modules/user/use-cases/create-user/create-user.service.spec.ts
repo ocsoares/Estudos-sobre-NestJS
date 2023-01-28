@@ -11,6 +11,12 @@ describe('CreateUserService', () => {
     let service: CreateUserService;
     let repository: UserRepository;
 
+    const userData: IUser = {
+        name: 'Teste',
+        email: 'teste@gmail.com',
+        password: 'teste23',
+    };
+
     beforeEach(async () => {
         const module = await Test.createTestingModule({
             providers: [
@@ -36,12 +42,6 @@ describe('CreateUserService', () => {
     // com os Métodos Mockados !!
 
     it('should throw BadRequestException if user already exists with findByName method', async () => {
-        const userData: IUser = {
-            name: 'TesteName',
-            email: 'testename@gmail.com',
-            password: 'testename123',
-        };
-
         // Mockando o RETORNO do Dado que esse Método pede (uma Interface IUser) DENTRO desse Método, porque no Service se
         // existir esse Dado, TEM que retornar ERRO !!
         // OBS: Como esse Método foi Mockado, independente do Dado passado nele nos (), IRÁ Retornar o Dado passado no
@@ -73,12 +73,6 @@ describe('CreateUserService', () => {
     });
 
     it('should throw BadRequestException if user already exists with findByEmail method', async () => {
-        const userData: IUser = {
-            name: 'TesteEmail',
-            email: 'testeemail@gmail.com',
-            password: 'testeemail123',
-        };
-
         (repository.findByEmail as jest.Mock).mockResolvedValue(userData);
 
         await expect(service.execute(userData)).rejects.toThrow(
