@@ -35,19 +35,23 @@ describe('CreateUserService', () => {
     // OBS: O service.execute() nesses casos de Erro é chamado para CHECAR as Condicionais de Erro DENTRO do Service, junto
     // com os Métodos Mockados !!
 
-    it('should throw BadRequestException if users already exists with findByName method', async () => {
+    it('should throw BadRequestException if user already exists with findByName method', async () => {
         const userData: IUser = {
-            name: 'Teste',
-            email: 'teste@gmail.com',
-            password: 'teste123',
+            name: 'TesteName',
+            email: 'testename@gmail.com',
+            password: 'testename123',
         };
 
         // Mockando o RETORNO do Dado que esse Método pede (uma Interface IUser) DENTRO desse Método, porque no Service se
         // existir esse Dado, TEM que retornar ERRO !!
-        // OBS: Como esse Método foi Mockado, independente do Dado passado nele, IRÁ Retornar o Dado passado no
+        // OBS: Como esse Método foi Mockado, independente do Dado passado nele nos (), IRÁ Retornar o Dado passado no
         // mockResolvedValue() !!
         // IMPORTANTE: Como esse método foi Mockado, SEMPRE existirá um Usuário, então o Service SEMPRE irá retornar
-        // ERRO, NÃO importa o que for passado  !!
+        // ERRO, NÃO importa o que for passado !!
+        // IMPORTANTE 2: Como a Condicional (nesse caso) no Service para lançar um Throw é se O RETORNO desse Método EXISTIR,
+        // então QUALQUER Dado passado aqui que NÃO seja false, null ou undefined IRÁ passar !!
+        // IMPORTANTE 3: Pode existir várias condicionais dentro do Service, mas (nesse exemplo) ele irá checar APENAS o
+        // Erro vindo da Condição do findByName(), que por estar Mockada sempre existirá e retornará ERRO !!
         (repository.findByName as jest.Mock).mockResolvedValue(userData);
 
         // Espera o ERRO especificado no Service !!
@@ -62,15 +66,17 @@ describe('CreateUserService', () => {
             ),
         );
 
-        // ENTENDER porque NÃO pode passar userData pq dá ERRO !!!
+        // O toHaveBeenCalledWith() verifica se o Método foi chamado com um determinado Dado passado como Parâmetro, nos () !!
+        // OBS: Nesse caso, ele é chamado com userData.name porque no Service o .execute() recebe um OBJETO de IUser, onde
+        // esse objeto tem a propriedade name, então ele usa esse OBJETO para passar dentro do MÉTODO findByName() !!
         expect(repository.findByName).toHaveBeenCalledWith(userData.name);
     });
 
     it('should throw BadRequestException if user already exists with findByEmail method', async () => {
         const userData: IUser = {
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            password: '123',
+            name: 'TesteEmail',
+            email: 'testeemail@gmail.com',
+            password: 'testeemail123',
         };
 
         (repository.findByEmail as jest.Mock).mockResolvedValue(userData);
@@ -84,19 +90,21 @@ describe('CreateUserService', () => {
         expect(repository.findByEmail).toHaveBeenCalledWith(userData.email);
     });
 
-    // FAZER ESSE direito...
     it('should create a new user', async () => {
         const userData: IUser = {
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            password: '123',
+            id: 'anyid',
+            name: 'TesteUser',
+            email: 'testeuser@gmail.com',
+            password: 'testeuser123',
         };
 
+        // Mockando o retorno do Método create(), logo, o service.execute() vai Retornar o que estiver
+        // sendo passado aqui nesse Mock, porque no Service Retorna o valor de .create() !!
         (repository.create as jest.Mock).mockResolvedValue(userData);
 
-        const result = await service.execute(userData);
+        const createUser = await service.execute(userData);
 
-        expect(result).toEqual(userData);
+        expect(createUser).toHaveProperty('id');
         expect(repository.create).toHaveBeenCalledWith(userData);
     });
 });
