@@ -1,19 +1,11 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { Model } from 'mongoose';
 import { IUser } from 'src/models/IUser';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
-import { MongooseUserRepository } from '../../../../repositories/implementations/mongoose/MongooseUserRepository';
-import {
-    User,
-    UserDocument,
-} from '../../../../repositories/implementations/mongoose/schemas/user.schema';
 import { CreateUserService } from './create-user.service';
 
 // Esse tipo de Teste vai verificar a LÓGICA do Service, ou seja, os IFs, throws e o objetivo do Service,
 // que é criar um Usuário com sucesso caso não exista um Usuário com o mesmo nome ou email !!!
-
-// ACHO que tá errado, porque aqui o Service não tem acesso ao Banco de Dados e não recebe Dados, ele só recebe o Repositório !!!!
 
 describe('CreateUserService', () => {
     let service: CreateUserService;
@@ -38,68 +30,73 @@ describe('CreateUserService', () => {
         repository = module.get(UserRepository);
     });
 
-    describe('execute', () => {
-        it('should throw BadRequestException if user already exists by name', async () => {
-            const userData: IUser = {
-                name: 'John Doe',
-                email: 'johndoe@example.com',
-                password: '123',
-            };
+    // Nos testes de ERRO, como o Banco de Dados está MOCKADO, esses Testes irão apenas testar se os Métodos Mockados do
+    // repository (UserRepository, nesse caso) retornam o erro esperado no Service quando ele é chamado !!
+    // OBS: O service.execute() nesses casos de Erro é chamado para CHECAR as Condicionais de Erro DENTRO do Service, junto
+    // com os Métodos Mockados !!
 
-            // (repository.findByName as jest.Mock).mockResolvedValue(userData);
+    it('should throw BadRequestException if users already exists with findByName method', async () => {
+        const userData: IUser = {
+            name: 'Teste',
+            email: 'teste@gmail.com',
+            password: 'teste123',
+        };
 
-            console.log('FIDFIOS:', await service.execute(userData));
+        // Mockando o RETORNO do Dado que esse Método pede (uma Interface IUser) DENTRO desse Método, porque no Service se
+        // existir esse Dado, TEM que retornar ERRO !!
+        // OBS: Como esse Método foi Mockado, independente do Dado passado nele, IRÁ Retornar o Dado passado no
+        // mockResolvedValue() !!
+        // IMPORTANTE: Como esse método foi Mockado, SEMPRE existirá um Usuário, então o Service SEMPRE irá retornar
+        // ERRO, NÃO importa o que for passado  !!
+        (repository.findByName as jest.Mock).mockResolvedValue(userData);
 
-            expect(await service.execute(userData)).rejects.toThrowError(
-                new BadRequestException(
-                    'Já existe um usuário cadastrado com esse nomeDJSIFOS !',
-                ),
-            );
+        // Espera o ERRO especificado no Service !!
+        // Passar userData dentro do service.execute() para passar pelo teste ...toHaveBeenCalledWith(userData.name); !!!
+        // OBS: o await ANTES do expect já transforma o Método em assíncrono, então não precisa colocar o await antes
+        // do Método !!
+        // IMPORTANTE: O que está dentro de service.execute(...) NÃO necessariamente importa, porque ela é importante apenas
+        // para EXECUTAR o Service que irá checar a condição do findByName (nesse caso), que JÁ ESTÁ MOCKADO !!!
+        await expect(service.execute(userData)).rejects.toThrow(
+            new BadRequestException(
+                'Já existe um usuário cadastrado com esse nome !',
+            ),
+        );
 
-            // try {
-            //     await service.execute(userData);
-            //     fail();
-            // } catch (error) {
-            //     expect(error).toBeInstanceOf(BadRequestException);
-            //     expect(error.message).toEqual(
-            //         'Já existe um usuário cadastrado com esse nomeDJSIFOS !',
-            //     );
-            // }
-        });
+        // ENTENDER porque NÃO pode passar userData pq dá ERRO !!!
+        expect(repository.findByName).toHaveBeenCalledWith(userData.name);
+    });
 
-        it('should throw BadRequestException if user already exists by email', async () => {
-            const userData: IUser = {
-                name: 'John Doe',
-                email: 'johndoe@example.com',
-                password: '123',
-            };
+    it('should throw BadRequestException if user already exists with findByEmail method', async () => {
+        const userData: IUser = {
+            name: 'John Doe',
+            email: 'johndoe@example.com',
+            password: '123',
+        };
 
-            (repository.findByEmail as jest.Mock).mockResolvedValue(userData);
+        (repository.findByEmail as jest.Mock).mockResolvedValue(userData);
 
-            try {
-                await service.execute(userData);
-                fail();
-            } catch (error) {
-                expect(error).toBeInstanceOf(BadRequestException);
-                expect(error.message).toEqual(
-                    'Já existe um usuário cadastrado com esse email !',
-                );
-            }
-        });
+        await expect(service.execute(userData)).rejects.toThrow(
+            new BadRequestException(
+                'Já existe um usuário cadastrado com esse email !',
+            ),
+        );
 
-        it('should create a new user', async () => {
-            const userData: IUser = {
-                name: 'John Doe',
-                email: 'johndoe@example.com',
-                password: '123',
-            };
+        expect(repository.findByEmail).toHaveBeenCalledWith(userData.email);
+    });
 
-            (repository.create as jest.Mock).mockResolvedValue(userData);
+    // FAZER ESSE direito...
+    it('should create a new user', async () => {
+        const userData: IUser = {
+            name: 'John Doe',
+            email: 'johndoe@example.com',
+            password: '123',
+        };
 
-            const result = await service.execute(userData);
+        (repository.create as jest.Mock).mockResolvedValue(userData);
 
-            expect(result).toEqual(userData);
-            expect(repository.create).toHaveBeenCalledWith(userData);
-        });
+        const result = await service.execute(userData);
+
+        expect(result).toEqual(userData);
+        expect(repository.create).toHaveBeenCalledWith(userData);
     });
 });
