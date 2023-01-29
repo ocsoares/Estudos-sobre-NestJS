@@ -17,6 +17,8 @@ describe('CreateUserService', () => {
         password: 'teste23',
     };
 
+    // Passar no providers o Service, e no provide abaixo dele a DEPENDÊNCIA do Constructor do Service, que nesse caso
+    // é o UserRepository !!
     beforeEach(async () => {
         const module = await Test.createTestingModule({
             providers: [
