@@ -36,6 +36,11 @@ describe('CreateUserService', () => {
         repository = module.get(UserRepository);
     });
 
+    it('should be defined', () => {
+        expect(service).toBeDefined();
+        expect(repository).toBeDefined();
+    });
+
     // Nos testes de ERRO, como o Banco de Dados está MOCKADO, esses Testes irão apenas testar se os Métodos Mockados do
     // repository (UserRepository, nesse caso) retornam o erro esperado no Service quando ele é chamado !!
     // OBS: O service.execute() nesses casos de Erro é chamado para CHECAR as Condicionais de Erro DENTRO do Service, junto
