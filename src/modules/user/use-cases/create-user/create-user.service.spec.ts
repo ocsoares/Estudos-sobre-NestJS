@@ -38,7 +38,7 @@ describe('CreateUserService', () => {
         repository = module.get(UserRepository);
     });
 
-    it('all dependencies should be defined', () => {
+    it('should be defined', () => {
         expect(service).toBeDefined();
         expect(repository).toBeDefined();
     });
