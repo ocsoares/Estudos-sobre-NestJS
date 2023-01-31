@@ -26,6 +26,7 @@ describe('CreateUserService', () => {
                 {
                     provide: UserRepository,
                     useValue: {
+                        // Mockar APENAS os Métodos que serão usados no Service !!
                         findByName: jest.fn(),
                         findByEmail: jest.fn(),
                         create: jest.fn(),

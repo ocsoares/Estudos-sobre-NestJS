@@ -9,6 +9,8 @@ s = service
 cl = class
 
 Gerar um Módulo = nest g module + NOME
+OBS: Para criar um Módulo dentro de uma pasta, usar nest g module + Pasta DENTRO de src/Nome do Módulo !!
+
 Fazer as validações de caso de uso nos Services !!
 
 Para criar um Controller dentro de uma pasta de Módulo = nest g co NOME_CONTROLLER + NOME_MÓDULO
