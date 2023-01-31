@@ -4,7 +4,6 @@ import { IUser } from 'src/models/IUser';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { CreateUserDTO } from './dtos/CreateUserDTO';
 
-// ENCRIPTAR a Senha !!!!!!! <<<<
 @Injectable()
 export class CreateUserService implements IService {
     constructor(private readonly _createUserRepository: UserRepository) {}
