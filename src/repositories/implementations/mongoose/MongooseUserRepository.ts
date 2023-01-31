@@ -19,7 +19,7 @@ export class MongooseUserRepository implements UserRepository {
 
         await newUser.save();
 
-        return newUser;
+        return newUser.toObject(); // Usar .toObject para retornar o Objeto newUser APENAS e não o Documento gigante do Mongo !!
     }
 
     async findById(id: string): Promise<IUser> {

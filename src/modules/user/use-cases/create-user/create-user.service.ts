@@ -2,7 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { IUser } from 'src/models/IUser';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
+import { CreateUserDTO } from './dtos/CreateUserDTO';
 
+// ENCRIPTAR a Senha !!!!!!! <<<<
 @Injectable()
 export class CreateUserService implements IService {
     constructor(private readonly _createUserRepository: UserRepository) {}
@@ -30,6 +32,12 @@ export class CreateUserService implements IService {
 
         const createUser = await this._createUserRepository.create(data);
 
-        return createUser;
+        const mainInformationUser: CreateUserDTO = {
+            name: createUser.name,
+            email: createUser.email,
+            password: createUser.password,
+        };
+
+        return mainInformationUser;
     }
 }

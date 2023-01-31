@@ -11,7 +11,6 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 
                 return {
                     uri,
-                    useNewUrlParser: true,
                 };
             },
         }),
