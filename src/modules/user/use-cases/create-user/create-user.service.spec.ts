@@ -94,7 +94,6 @@ describe('CreateUserService', () => {
 
     it('should create a new user', async () => {
         const userData: IUser = {
-            id: 'anyid',
             name: 'TesteUser',
             email: 'testeuser@gmail.com',
             password: 'testeuser123',
@@ -106,7 +105,7 @@ describe('CreateUserService', () => {
 
         const createUser = await service.execute(userData);
 
-        expect(createUser).toHaveProperty('id');
+        expect(createUser).toEqual(userData);
         expect(repository.create).toHaveBeenCalledWith(userData);
     });
 });
