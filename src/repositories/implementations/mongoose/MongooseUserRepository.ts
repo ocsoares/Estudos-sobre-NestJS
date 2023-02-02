@@ -15,9 +15,7 @@ export class MongooseUserRepository implements UserRepository {
 
     // IUser pq ele tem Id como opcional, e preciso dele para Verificar se o Usuário JÁ existe !!
     async create(data: IUser): Promise<IUser> {
-        const newUser = new this._userModel(data);
-
-        await newUser.save();
+        const newUser = await this._userModel.create(data);
 
         return newUser.toObject(); // Usar .toObject para retornar o Objeto newUser APENAS e não o Documento gigante do Mongo !!
     }
