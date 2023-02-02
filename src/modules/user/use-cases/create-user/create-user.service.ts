@@ -3,6 +3,7 @@ import { IService } from 'src/interfaces/IService';
 import { IUser } from 'src/models/IUser';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { CreateUserDTO } from './dtos/CreateUserDTO';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CreateUserService implements IService {
@@ -29,7 +30,11 @@ export class CreateUserService implements IService {
             );
         }
 
-        const createUser = await this._createUserRepository.create(data);
+        const createUser = await this._createUserRepository.create({
+            name: data.name,
+            email: data.email,
+            password: await bcrypt.hash(data.password, 10),
+        });
 
         const mainInformationUser: CreateUserDTO = {
             name: createUser.name,
