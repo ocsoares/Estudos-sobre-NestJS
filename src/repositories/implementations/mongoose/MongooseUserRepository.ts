@@ -23,18 +23,20 @@ export class MongooseUserRepository implements UserRepository {
     async findById(id: string): Promise<IUser> {
         const user = await this._userModel.findById(id);
 
-        return user;
+        // Tive que fazer assim porque se o Objeto NÃO existir, o .toObject() vai dar ERRO !!!
+        // OBS: Como isso não traz o Objeto gigante do Mongo, auxilia nos Testes !!!
+        return user ? user.toObject() : undefined;
     }
 
     async findByName(name: string): Promise<IUser> {
         const user = await this._userModel.findOne({ name });
 
-        return user;
+        return user ? user.toObject() : undefined;
     }
 
     async findByEmail(email: string): Promise<IUser> {
         const user = await this._userModel.findOne({ email });
 
-        return user;
+        return user ? user.toObject() : undefined;
     }
 }

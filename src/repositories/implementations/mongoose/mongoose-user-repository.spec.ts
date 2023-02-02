@@ -7,9 +7,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { IUser } from 'src/models/IUser';
 import { MongooseUserRepository } from './MongooseUserRepository';
 import { User, UserSchema } from './schemas/user.schema';
+import { CreateUserDTO } from 'src/modules/user/use-cases/create-user/dtos/CreateUserDTO';
 
 describe('MongooseUserRepository', () => {
     let userRepository: MongooseUserRepository;
+    let createdUser: IUser;
 
     beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -44,12 +46,15 @@ describe('MongooseUserRepository', () => {
     });
 
     it('should create a user', async () => {
-        const userData: IUser = {
+        const userData = {
             name: 'Teste',
             email: 'teste@gmail.com',
             password: 'teste123',
         };
 
+        // Aqui pode usar expect.any nas Propriedades geradas pelo BANCO DE DADOS, porque elas
+        // podem VARIAR !!!
+        // OBS: Se os dados forem FIXOS, NÃO pode usar esses expect.any(), porque vai dar ERRO !!!
         const expectedUser = {
             ...userData,
             _id: expect.any(mongoose.Types.ObjectId),
@@ -57,8 +62,32 @@ describe('MongooseUserRepository', () => {
             updatedAt: expect.any(Date),
             __v: expect.any(Number),
         };
-        const createdUser = await userRepository.create(userData);
+
+        createdUser = await userRepository.create(userData);
 
         expect(createdUser).toEqual(expectedUser);
+    });
+
+    it('should find a user by id', async () => {
+        type User = CreateUserDTO & { _id: string };
+        const createdUserWithMongoId = createdUser as User;
+
+        const userById = await userRepository.findById(
+            createdUserWithMongoId._id,
+        );
+
+        expect(userById).toEqual(createdUser);
+    });
+
+    it('should find a user by name', async () => {
+        const userByName = await userRepository.findByName(createdUser.name);
+
+        expect(userByName).toEqual(createdUser);
+    });
+
+    it('should find a user by email', async () => {
+        const userByEmail = await userRepository.findByEmail(createdUser.email);
+
+        expect(userByEmail).toEqual(createdUser);
     });
 });
