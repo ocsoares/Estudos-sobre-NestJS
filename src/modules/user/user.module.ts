@@ -9,7 +9,6 @@ import {
     UserSchema,
 } from '../../repositories/implementations/mongoose/schemas/user.schema';
 import { LoginUserController } from './use-cases/login-user/login-user.controller';
-import { LoginUserService } from './use-cases/login-user/login-user.service';
 
 @Module({
     imports: [
@@ -22,7 +21,7 @@ import { LoginUserService } from './use-cases/login-user/login-user.service';
             provide: UserRepository, // Repositório de CONTRATO com os Métodos !!
             useClass: MongooseUserRepository, // Repositório do Banco de Dados REAL !!
         },
-        LoginUserService,
     ],
+    exports: [UserRepository],
 })
 export class UserModule {}

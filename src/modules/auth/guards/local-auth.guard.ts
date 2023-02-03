@@ -15,6 +15,8 @@ export class LocalAuthGuard extends AuthGuard('local') {
     }
 
     // Trata o erro do mecanismo de Token !
+    // OBS: Acho que esse user é o User que, se validado com Sucesso, o Nest coloca dentro
+    // dessa Variável !!
     handleRequest(err: any, user: any) {
         if (err || !user) {
             throw new UnauthorizedException(err?.message);
