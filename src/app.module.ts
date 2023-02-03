@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
     imports: [
@@ -12,6 +13,7 @@ import { UserModule } from './modules/user/user.module';
         }),
         MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
         UserModule,
+        AuthModule,
     ],
     controllers: [],
     providers: [],
