@@ -3,6 +3,7 @@ import { Test } from '@nestjs/testing';
 import { IUser } from 'src/models/IUser';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { CreateUserService } from './create-user.service';
+import * as bcript from 'bcrypt';
 
 // Esse tipo de Teste vai verificar a LÓGICA do Service, ou seja, os IFs, throws e o objetivo do Service,
 // que é criar um Usuário com sucesso caso não exista um Usuário com o mesmo nome ou email !!!
@@ -99,13 +100,27 @@ describe('CreateUserService', () => {
             password: 'testeuser123',
         };
 
-        // Mockando o retorno do Método create(), logo, o service.execute() vai Retornar o que estiver
-        // sendo passado aqui nesse Mock, porque no Service Retorna o valor de .create() !!
-        (repository.create as jest.Mock).mockResolvedValue(userData);
+        const userDataAnyPassword: IUser = {
+            name: userData.name,
+            email: userData.email,
+            password: expect.any(String), // Assim porque a senha vem ALEATÓRIA do tipo String, porque causa do bcript !!!
+        };
+
+        (repository.create as jest.Mock).mockResolvedValue(<IUser>{
+            name: userData.name,
+            email: userData.email,
+            password: await bcript.hash(userData.password, 10),
+        });
 
         const createUser = await service.execute(userData);
 
-        expect(createUser).toEqual(userData);
-        expect(repository.create).toHaveBeenCalledWith(userData);
+        const isValidEncryptedPassword = await bcript.compare(
+            userData.password,
+            createUser.password,
+        );
+
+        expect(createUser).toEqual(userDataAnyPassword);
+        expect(isValidEncryptedPassword).toBe(true);
+        expect(repository.create).toHaveBeenCalledWith(userDataAnyPassword);
     });
 });

@@ -7,6 +7,7 @@ import { InMemoryDbModule } from '../../../../modules/in-memory-database/in-memo
 import { CreateUserService } from './create-user.service';
 import { CreateUserDTO } from './dtos/CreateUserDTO';
 import { IUser } from 'src/models/IUser';
+import * as bcrypt from 'bcrypt';
 
 describe('UserController', () => {
     let app: INestApplication;
@@ -71,12 +72,24 @@ describe('UserController', () => {
             password: 'johndoe123',
         };
 
+        const userDataAnyPassword: CreateUserDTO = {
+            name: userData.name,
+            email: userData.email,
+            password: expect.any(String),
+        };
+
         const response = await request(app.getHttpServer())
             .post('/auth/register')
             .send(userData)
             .expect(201);
 
-        expect(response.body.data).toEqual(userData);
+        const isValidEncryptedPassword = await bcrypt.compare(
+            userData.password,
+            response.body.data.password,
+        );
+
+        expect(response.body.data).toEqual(userDataAnyPassword);
+        expect(isValidEncryptedPassword).toBe(true);
         expect(userService.execute).toHaveBeenCalledTimes(1);
         expect(userService.execute).toHaveBeenCalledWith(userData);
     });
