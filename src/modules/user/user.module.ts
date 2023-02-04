@@ -9,10 +9,20 @@ import {
     UserSchema,
 } from '../../repositories/implementations/mongoose/schemas/user.schema';
 import { LoginUserController } from './use-cases/login-user/login-user.controller';
+import { LoginUserService } from './use-cases/login-user/login-user.service';
+import { JwtModule } from '@nestjs/jwt';
+
+// OBS: O JwtModule TEM que ser Async, porque se não for NÃO carrega as Variáveis de Ambiente !!!
 
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+        JwtModule.registerAsync({
+            useFactory: async () => ({
+                secret: process.env.JWT_SECRET,
+                signOptions: { expiresIn: process.env.JWT_EXPIRATION },
+            }),
+        }),
     ],
     controllers: [CreateUserController, LoginUserController],
     providers: [
@@ -21,6 +31,7 @@ import { LoginUserController } from './use-cases/login-user/login-user.controlle
             provide: UserRepository, // Repositório de CONTRATO com os Métodos !!
             useClass: MongooseUserRepository, // Repositório do Banco de Dados REAL !!
         },
+        LoginUserService,
     ],
     exports: [UserRepository],
 })

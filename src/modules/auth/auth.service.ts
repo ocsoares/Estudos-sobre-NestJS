@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/repositories/abstracts/UserRepository';
 import * as bcrypt from 'bcrypt';
-import { IUser } from 'src/models/IUser';
+import { IReturnUser } from 'src/interfaces/IReturnUser';
 
 interface IAuthService {
-    validateUser(email: string, password: string): Promise<IUser>; // VER o Retorno disso...
+    validateUser(email: string, password: string): Promise<IReturnUser>; // VER o Retorno disso...
 }
 
 // Colocar um Throw de Error aqui nesse Service, porque no local auth guard está configurado para o
@@ -15,10 +15,8 @@ interface IAuthService {
 export class AuthService implements IAuthService {
     constructor(private readonly _authUserRepository: UserRepository) {}
 
-    async validateUser(email: string, password: string): Promise<IUser> {
+    async validateUser(email: string, password: string): Promise<IReturnUser> {
         const user = await this._authUserRepository.findByEmail(email);
-
-        console.log('USER:', user);
 
         if (!user) {
             throw new Error('Email ou senha incorreto(s) !');
@@ -26,16 +24,14 @@ export class AuthService implements IAuthService {
 
         const isValidPassword = await bcrypt.compare(password, user.password);
 
-        console.log('isValidPassword:', isValidPassword);
-
         if (!isValidPassword) {
             throw new Error('Email ou senha incorreto(s) !');
         }
 
+        // eslint-disable-next-line prettier/prettier, @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+        const { password:_, ...returnUser } = user
+
         // NÃO retornar a Senha, mesmo que Criptografada !!!
-        return {
-            ...user,
-            password: undefined,
-        };
+        return returnUser as IReturnUser;
     }
 }
