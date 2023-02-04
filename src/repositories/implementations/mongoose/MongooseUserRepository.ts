@@ -17,6 +17,13 @@ export class MongooseUserRepository implements UserRepository {
     async create(data: IUser): Promise<IUser> {
         const newUser = await this._userModel.create(data);
 
+        // Setando o ID da Interface IUser nesse Documento do Mongo criado !!!
+        // OBS: O id está DECLARADO em user.schema como opcional, mas aqui eu estou SETANDO ele com
+        // o MESMO valor de _id !!!
+        // eslint-disable-next-line prefer-destructuring
+        newUser.id = newUser._id;
+        await newUser.save();
+
         return newUser.toObject(); // Usar .toObject para retornar o Objeto newUser APENAS e não o Documento gigante do Mongo !!
     }
 

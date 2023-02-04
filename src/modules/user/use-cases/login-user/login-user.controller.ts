@@ -7,7 +7,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { IController, returnHandle } from 'src/interfaces/IController';
-import { LocalAuthGuard } from 'src/modules/auth/guards/local-auth.guard';
+import { LocalAuthGuard } from '../../../../modules/auth/guards/local-auth.guard';
 import { IAuthRequest } from 'src/modules/auth/types/IAuthRequest';
 import { LoginUserService } from './login-user.service';
 
