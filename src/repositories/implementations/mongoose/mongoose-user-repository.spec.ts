@@ -58,6 +58,7 @@ describe('MongooseUserRepository', () => {
         const expectedUser = {
             ...userData,
             _id: expect.any(mongoose.Types.ObjectId),
+            id: expect.any(mongoose.Types.ObjectId),
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
             __v: expect.any(Number),
