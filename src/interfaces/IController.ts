@@ -8,6 +8,7 @@ export interface returnHandle {
 // não, por exemplo, retornar TODOS os Dados de algo, e object porque precisa Receber uma
 // Interface (DTO) !!
 
+// Usei ...args para receber Nenhum ou DIVERSOS Parâmetros, do tipo Objeto !!!
 export interface IController {
-    handle(dataNestDecorator?: object): Promise<returnHandle>;
+    handle(...args: object[]): Promise<returnHandle>;
 }
