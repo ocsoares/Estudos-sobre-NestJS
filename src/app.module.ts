@@ -4,6 +4,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 
+// OBS: O ConfigModule aqui Habilita Globalmente as Variáveis de Ambiente para os ARQUIVOS de outros Módulos,
+// (services, controllers, etc...) e NÃO para o arquivo do Módulo em si, nesse caso, tem que usar um Método
+// async junto com useFactory async, exemplo: useFactory: async () => ({}) !!
+
 @Module({
     imports: [
         ConfigModule.forRoot({
