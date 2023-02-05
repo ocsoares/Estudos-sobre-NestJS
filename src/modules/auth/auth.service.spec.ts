@@ -19,7 +19,7 @@ describe('AuthService', () => {
     type authUserData = { email: string; password: string };
 
     const userData: authUserData = {
-        email: 'Teste',
+        email: 'teste@gmail.com',
         password: 'teste123',
     };
 
@@ -41,6 +41,10 @@ describe('AuthService', () => {
 
         jest.spyOn(service, 'validateUser');
         bcryptSpy = jest.spyOn(bcrypt, 'compare');
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     it('should be defined', () => {
@@ -69,6 +73,31 @@ describe('AuthService', () => {
         ).rejects.toThrow(new Error('Email ou senha incorreto(s) !'));
 
         expect(service.validateUser).toHaveBeenCalledTimes(1);
+        expect(bcryptSpy).toHaveBeenCalledTimes(1);
+        expect(repository.findByEmail).toHaveBeenCalledWith(userData.email);
+
+        expect(bcryptSpy).toHaveBeenCalledWith(
+            userData.password,
+            user.password,
+        );
+    });
+
+    it('should validate a valid user', async () => {
+        (repository.findByEmail as jest.Mock).mockResolvedValue(user);
+        bcryptSpy.mockResolvedValue(true);
+
+        // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+        const { password: _, ...returnUser } = user;
+
+        const result = await service.validateUser(
+            userData.email,
+            userData.password,
+        );
+
+        expect(result).toEqual(returnUser);
+        expect(service.validateUser).toHaveBeenCalledTimes(1);
+        expect(bcryptSpy).toHaveBeenCalledTimes(1);
+        expect(repository.findByEmail).toHaveBeenCalledWith(userData.email);
 
         expect(bcryptSpy).toHaveBeenCalledWith(
             userData.password,
