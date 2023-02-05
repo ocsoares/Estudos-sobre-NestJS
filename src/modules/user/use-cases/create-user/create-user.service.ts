@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 export class CreateUserService implements IService {
     constructor(private readonly _createUserRepository: UserRepository) {}
 
-    async execute(data: IUser) {
+    async execute(data: IUser): Promise<CreateUserDTO> {
         const userAlreadyExists = await this._createUserRepository.findByName(
             data.name,
         );
