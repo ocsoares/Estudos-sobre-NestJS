@@ -19,6 +19,7 @@ describe('LoginUserController', () => {
     let repository: UserRepository;
     let service: LoginUserService;
     let bcryptCompare: jest.SpyInstance;
+    const route = '/auth/login';
 
     const user: IUser = {
         id: 'any_id',
@@ -104,19 +105,36 @@ describe('LoginUserController', () => {
         expect(bcryptCompare).toBeDefined();
     });
 
+    // NÃO mockei NADA aqui nesse teste porque se eu Mockar o Email, logo ele existe, então ele PASSA do Erro, como eu NÃO
+    // quero isso, não mockei o Email, logo, a Senha nem vai chegar a ser Validade (comparada no Bcrypt) !!!
+    it('should NOT generate a JWT for a invalid user', async () => {
+        const response = await supertest(app.getHttpServer())
+            .post(route)
+            .send(loginBody)
+            .expect(401);
+
+        const { message } = response.body;
+        const expectedMessage = 'Email ou senha incorreto(s) !';
+
+        expect(message).toEqual(expectedMessage);
+        expect(repository.findByEmail).toHaveBeenCalledWith(loginBody.email);
+        expect(bcryptCompare).toHaveBeenCalledTimes(0);
+        expect(service.execute).toHaveBeenCalledTimes(0);
+    });
+
     it('should generate a JWT for a valid user', async () => {
         (repository.findByEmail as jest.Mock).mockResolvedValue(user);
         bcryptCompare.mockResolvedValue(true);
 
         const response = await supertest(app.getHttpServer())
-            .post('/auth/login')
+            .post(route)
             .send(loginBody)
             .expect(200);
 
         const JWT = response.body.data;
 
         expect(JWT).toEqual(expect.any(String));
-        expect(repository.findByEmail).toHaveBeenCalledWith(user.email);
+        expect(repository.findByEmail).toHaveBeenCalledWith(loginBody.email);
         expect(service.execute).toHaveBeenCalledTimes(1);
         expect(service.execute).toHaveBeenCalledWith(userNoPass);
         expect(bcryptCompare).toHaveBeenCalledWith(
