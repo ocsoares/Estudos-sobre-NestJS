@@ -28,7 +28,7 @@ describe('LoginUserController', () => {
         password: 'teste123',
     };
 
-    const userNoPass: IReturnUser = {
+    const userWithoutPass: IReturnUser = {
         id: user.id,
         name: user.name,
         email: user.email,
@@ -136,7 +136,7 @@ describe('LoginUserController', () => {
         expect(JWT).toEqual(expect.any(String));
         expect(repository.findByEmail).toHaveBeenCalledWith(loginBody.email);
         expect(service.execute).toHaveBeenCalledTimes(1);
-        expect(service.execute).toHaveBeenCalledWith(userNoPass);
+        expect(service.execute).toHaveBeenCalledWith(userWithoutPass);
         expect(bcryptCompare).toHaveBeenCalledWith(
             loginBody.password,
             user.password,
