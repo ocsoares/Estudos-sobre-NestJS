@@ -31,7 +31,7 @@
             "array": true,
             "object": true
           }, {
-            "enforceForRenamedProperties": true
+            // "enforceForRenamedProperties": true
           }],
         "@typescript-eslint/linebreak-style": "off",
         "@typescript-eslint/interface-name-prefix": "off",
