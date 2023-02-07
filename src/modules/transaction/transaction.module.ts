@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TransferController } from './use-cases/transfer/transfer.controller';
-import { TransferService } from './use-cases/transfer/transfer.service';
+import { MakeTransferController } from './use-cases/make-transfer/make-transfer.controller';
+import { MakeTransferService } from './use-cases/make-transfer/make-transfer.service';
 
 @Module({
-    controllers: [TransferController],
-    providers: [TransferService],
+    controllers: [MakeTransferController],
+    providers: [MakeTransferService],
 })
 export class TransactionModule {}
