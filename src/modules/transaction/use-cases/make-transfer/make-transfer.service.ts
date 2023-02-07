@@ -20,6 +20,12 @@ export class MakeTransferService implements IService {
         );
         const lastForDigitsCard = card_number.slice(12, 16);
 
-        return 'a' as any;
+        const makeTransfer = await this._makeTransferRepository.create({
+            ...data,
+            transfer_amount: fixTransferAmountTwoDecimalPlaces,
+            card_number: lastForDigitsCard,
+        });
+
+        return makeTransfer;
     }
 }

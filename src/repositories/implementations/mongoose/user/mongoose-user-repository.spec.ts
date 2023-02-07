@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import { IUser } from 'src/models/IUser';
 import { MongooseUserRepository } from './MongooseUserRepository';
-import { User, UserSchema } from './schemas/user.schema';
+import { User, UserSchema } from '../schemas/user.schema';
 import { CreateUserDTO } from 'src/modules/user/use-cases/create-user/dtos/CreateUserDTO';
 
 describe('MongooseUserRepository', () => {

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUser } from 'src/models/IUser';
 import { UserRepository } from 'src/repositories/abstracts/UserRepository';
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserDocument } from '../schemas/user.schema';
 
 // PRECISA desse @Injectable para Injetar no Repositório que está chamando lá no providers !!!
 
