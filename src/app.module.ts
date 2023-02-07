@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { TransactionModule } from './modules/transaction/transaction.module';
 
 // OBS: O ConfigModule aqui Habilita Globalmente as Variáveis de Ambiente para os ARQUIVOS de outros Módulos,
 // (services, controllers, etc...) e NÃO para o arquivo do Módulo em si, nesse caso, tem que usar um Método
@@ -18,6 +19,7 @@ import { AuthModule } from './modules/auth/auth.module';
         MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
         UserModule,
         AuthModule,
+        TransactionModule,
     ],
     controllers: [],
     providers: [],
