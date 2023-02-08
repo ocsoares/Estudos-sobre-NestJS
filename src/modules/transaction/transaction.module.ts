@@ -8,6 +8,8 @@ import {
     Transaction,
     TransactionSchema,
 } from 'src/repositories/implementations/mongoose/schemas/transaction.schema';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Module({
     imports: [
@@ -18,6 +20,10 @@ import {
     controllers: [MakeTransferController],
     providers: [
         MakeTransferService,
+        {
+            provide: APP_GUARD,
+            useClass: JwtAuthGuard,
+        },
         {
             provide: TransactionRepository,
             useClass: MongooseTransactionRepository,

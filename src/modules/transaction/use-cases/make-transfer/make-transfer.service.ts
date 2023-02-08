@@ -12,7 +12,6 @@ export class MakeTransferService implements IService {
         private readonly _makeTransferRepository: TransactionRepository,
     ) {}
 
-    // Vou ter que pegar o JWT (account_id) passado no Authentication de alguma forma no Controller !!!
     async execute(data: ITransaction): Promise<IReturnTransfer> {
         const { transfer_amount, card_number } = data;
 

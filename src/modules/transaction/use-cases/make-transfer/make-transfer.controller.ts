@@ -15,6 +15,7 @@ export class MakeTransferController implements IController {
         @Body() body: MakeTransferDTO,
         @Request() req: ExpressRequest,
     ): Promise<returnHandle> {
+        // ARRUMAR ISSO, está ERRADO, tô salvando o TOKEN ao invés do ID da Conta !!
         const [, token] = req.headers.authorization.split(' ');
 
         const makeTransfer = await this._makeTransferService.execute({

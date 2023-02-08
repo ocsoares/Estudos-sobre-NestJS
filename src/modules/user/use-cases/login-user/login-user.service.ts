@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IReturnUser } from 'src/interfaces/IReturnUser';
 import { IService } from 'src/interfaces/IService';
-import { IUserPayload } from './models/IUserPayload';
+import { IUserPayload } from 'src/modules/auth/models/IUserPayload';
 
 // Service responsável por fornecer o JWT !!!
 

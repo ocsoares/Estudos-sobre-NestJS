@@ -7,6 +7,8 @@ g = generate
 co = controller
 s = service
 cl = class
+gu = guard
+d = decorator
 
 Gerar um Módulo = nest g module + NOME
 OBS: Para criar um Módulo dentro de uma pasta, usar nest g module + Pasta DENTRO de src/Nome do Módulo !!
