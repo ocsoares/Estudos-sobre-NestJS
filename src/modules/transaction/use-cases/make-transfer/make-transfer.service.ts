@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { ITransaction } from 'src/models/ITransaction';
 import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
+import { IReturnTransfer } from './interfaces/IReturnTransfer';
 
 @Injectable()
 export class MakeTransferService implements IService {
@@ -11,8 +12,8 @@ export class MakeTransferService implements IService {
         private readonly _makeTransferRepository: TransactionRepository,
     ) {}
 
-    // TALVEZ vou ter que usar o @Request aqui para pegar o ID do JWT...
-    async execute(data: ITransaction): Promise<ITransaction> {
+    // Vou ter que pegar o JWT (account_id) passado no Authentication de alguma forma no Controller !!!
+    async execute(data: ITransaction): Promise<IReturnTransfer> {
         const { transfer_amount, card_number } = data;
 
         const fixTransferAmountTwoDecimalPlaces = Number(
@@ -26,6 +27,15 @@ export class MakeTransferService implements IService {
             card_number: lastForDigitsCard,
         });
 
-        return makeTransfer;
+        const mainInformationTransfer: IReturnTransfer = {
+            date: makeTransfer.date,
+            transfer_amount: makeTransfer.transfer_amount,
+            description: makeTransfer.description,
+            payment_method: makeTransfer.payment_method,
+            card_number: `....-${makeTransfer.card_number}`,
+            card_holder: makeTransfer.card_holder,
+        };
+
+        return mainInformationTransfer;
     }
 }
