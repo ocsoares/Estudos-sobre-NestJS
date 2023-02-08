@@ -3,7 +3,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { IController, returnHandle } from 'src/interfaces/IController';
 import { IReturnUser } from 'src/interfaces/IReturnUser';
-import { CurrentUserId } from 'src/modules/auth/decorators/current-user-id.decorator';
+import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 import { MakeTransferDTO } from './dtos/MakeTransferDTO';
 import { MakeTransferService } from './make-transfer.service';
 
@@ -14,7 +14,7 @@ export class MakeTransferController implements IController {
     @Post('transaction')
     async handle(
         @Body() body: MakeTransferDTO,
-        @CurrentUserId() user: IReturnUser,
+        @CurrentUser() user: IReturnUser,
     ): Promise<returnHandle> {
         const makeTransfer = await this._makeTransferService.execute({
             account_id: user.id,
