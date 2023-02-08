@@ -16,7 +16,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
         type authRequest = { email: string; password: string };
         const { email, password } = request.body as authRequest;
 
-        // Validade Body !!
+        // Valida o Body !!
         if (!email || !password) {
             throw new UnauthorizedException('Missing email and/or password !');
         }
