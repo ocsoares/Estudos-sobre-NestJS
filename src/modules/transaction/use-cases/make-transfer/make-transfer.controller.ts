@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { Body, Controller, Post, Request } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
+import { Body, Controller, Post } from '@nestjs/common';
 import { IController, returnHandle } from 'src/interfaces/IController';
+import { IReturnUser } from 'src/interfaces/IReturnUser';
+import { CurrentUserId } from 'src/modules/auth/decorators/current-user-id.decorator';
 import { MakeTransferDTO } from './dtos/MakeTransferDTO';
 import { MakeTransferService } from './make-transfer.service';
 
@@ -13,13 +14,10 @@ export class MakeTransferController implements IController {
     @Post('transaction')
     async handle(
         @Body() body: MakeTransferDTO,
-        @Request() req: ExpressRequest,
+        @CurrentUserId() user: IReturnUser,
     ): Promise<returnHandle> {
-        // ARRUMAR ISSO, está ERRADO, tô salvando o TOKEN ao invés do ID da Conta !!
-        const [, token] = req.headers.authorization.split(' ');
-
         const makeTransfer = await this._makeTransferService.execute({
-            account_id: token,
+            account_id: user.id,
             ...body,
         });
 
