@@ -4,17 +4,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
-
-// OBS: O ConfigModule aqui Habilita Globalmente as Variáveis de Ambiente para os ARQUIVOS de outros Módulos,
-// (services, controllers, etc...) e NÃO para o arquivo do Módulo em si, nesse caso, tem que usar um Método
-// async junto com useFactory async, exemplo: useFactory: async () => ({}) !!
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
-            // Hablita para usar Variáveis de Ambiente (.env)
-            isGlobal: true, // Para TODO o Aplicativo (todos Controllers, Services, etc...)
-            envFilePath: '.env', // Nome do Arquivo .env
+            isGlobal: true,
+            envFilePath: '.env',
         }),
         MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
         UserModule,
@@ -22,6 +19,13 @@ import { TransactionModule } from './modules/transaction/transaction.module';
         TransactionModule,
     ],
     controllers: [],
-    providers: [],
+    providers: [
+        {
+            // Ativa GLOBALMENTE o JwtAuthGuard para a Aplicação, e para DESATIVAR para uma Rota,
+            // usar o Decorator Personalizado @IsPublic() no Controller !!!
+            provide: APP_GUARD,
+            useClass: JwtAuthGuard,
+        },
+    ],
 })
 export class AppModule {}

@@ -33,7 +33,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
         return canActivatePromise.catch((error) => {
             if (error instanceof UnauthorizedException) {
-                throw new UnauthorizedException(error.message);
+                throw new UnauthorizedException('Invalid or expired token !');
             }
 
             throw new UnauthorizedException();
