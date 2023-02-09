@@ -21,7 +21,9 @@ export class MakeTransferDTO {
 
     @IsNotEmpty()
     @IsString()
-    @IsEnum(['debit_card', 'credit_card'])
+    @IsEnum(['debit_card', 'credit_card'], {
+        message: 'payment_method must be debit_card or credit_card',
+    })
     readonly payment_method: 'debit_card' | 'credit_card';
 
     @IsNotEmpty()
