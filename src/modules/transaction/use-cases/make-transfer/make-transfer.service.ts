@@ -3,7 +3,7 @@
 import { Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { ITransaction } from 'src/models/ITransaction';
-import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
+import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
 
 @Injectable()

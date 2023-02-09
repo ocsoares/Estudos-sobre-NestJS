@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 import { MakeTransferService } from './make-transfer.service';
 
 describe('MakeTransferService', () => {
@@ -6,7 +7,13 @@ describe('MakeTransferService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [MakeTransferService],
+            providers: [
+                MakeTransferService,
+                {
+                    provide: TransactionRepository,
+                    useValue: {},
+                },
+            ],
         }).compile();
 
         service = module.get<MakeTransferService>(MakeTransferService);

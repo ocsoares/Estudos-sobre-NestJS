@@ -3,7 +3,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { IController, returnHandle } from 'src/interfaces/IController';
 import { IReturnUser } from 'src/interfaces/IReturnUser';
-import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
+import { CurrentUser } from '../../../../modules/auth/decorators/current-user.decorator';
 import { MakeTransferDTO } from './dtos/MakeTransferDTO';
 import { MakeTransferService } from './make-transfer.service';
 
