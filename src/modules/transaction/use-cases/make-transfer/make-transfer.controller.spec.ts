@@ -50,12 +50,6 @@ describe('MakeTransferController', () => {
                     provide: APP_GUARD,
                     useClass: JwtAuthGuard,
                 },
-                {
-                    provide: JwtAuthGuard,
-                    useValue: {
-                        canActivate: jest.fn(() => true),
-                    },
-                },
             ],
         }).compile();
 
