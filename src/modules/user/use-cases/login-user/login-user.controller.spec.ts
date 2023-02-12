@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigModule } from '@nestjs/config';
 import { IReturnUser } from 'src/interfaces/IReturnUser';
+import { LoginValidationBodyModule } from '../../../../modules/test/login-validation-body/login-validation-body.module';
 
 describe('LoginUserController', () => {
     let app: INestApplication;
@@ -63,6 +64,9 @@ describe('LoginUserController', () => {
             imports: [
                 ConfigModule.forRoot(),
                 PassportModule.register({ defaultStrategy: 'local' }),
+                // Para usar Middlewares no Teste, usar MÓDULOS específicos para ativar os Middlewares,
+                // como esse abaixo !!!
+                LoginValidationBodyModule,
             ],
             controllers: [LoginUserController],
             providers: [
@@ -114,10 +118,17 @@ describe('LoginUserController', () => {
         const response = await supertest(app.getHttpServer())
             .post(route)
             .send(invalidLoginBody)
-            .expect(401);
+            .expect(400);
+
+        console.log(response.body);
 
         const { message } = response.body;
-        const expectedMessage = 'Missing email and/or password !';
+        const expectedMessage = [
+            'email must be an email',
+            'email should not be empty',
+            'password must be a string',
+            'password should not be empty',
+        ];
 
         expect(message).toEqual(expectedMessage);
         expect(service.execute).toHaveBeenCalledTimes(0);

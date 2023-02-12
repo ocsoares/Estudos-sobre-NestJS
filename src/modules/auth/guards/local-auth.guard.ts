@@ -11,16 +11,6 @@ import {
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {
     canActivate(context: ExecutionContext) {
-        const request = context.switchToHttp().getRequest();
-
-        type authRequest = { email: string; password: string };
-        const { email, password } = request.body as authRequest;
-
-        // Valida o Body !!
-        if (!email || !password) {
-            throw new UnauthorizedException('Missing email and/or password !');
-        }
-
         return super.canActivate(context);
     }
 

@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { LoginValidationBodyModule } from './modules/test/login-validation-body/login-validation-body.module';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
         UserModule,
         AuthModule,
         TransactionModule,
+        LoginValidationBodyModule,
     ],
     controllers: [],
     providers: [
