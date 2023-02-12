@@ -120,8 +120,6 @@ describe('LoginUserController', () => {
             .send(invalidLoginBody)
             .expect(400);
 
-        console.log(response.body);
-
         const { message } = response.body;
         const expectedMessage = [
             'email must be an email',
