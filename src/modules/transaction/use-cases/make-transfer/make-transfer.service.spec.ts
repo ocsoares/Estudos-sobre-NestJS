@@ -51,20 +51,17 @@ describe('MakeTransferService', () => {
         const expectedMakeTransfer: IReturnTransfer = {
             date: new Date(),
             transfer_amount: 1250.48,
-            description: 'Iphone X',
-            payment_method: 'credit_card',
+            description: userData.description,
+            payment_method: userData.payment_method,
             card_number: '....-1501',
-            card_holder: 'Lucas Batista',
+            card_holder: userData.card_holder,
         };
 
-        // NÃO precisa por os "....-" no card_number porque JÁ ESTÁ no Objeto de Retorno do service.execute,
-        // ou seja, no makeTransfer abaixo !!!
         // OBS: O date NÃO foi passado aqui porque ele é Gerado AUTOMATICAMENTE no Banco de Dados, então coloquei
         // como RETORNO no expectedMakeTransfer Acima !!!
         (transactionRepository.create as jest.Mock).mockResolvedValue({
             account_id: 'any_account_id',
             ...expectedMakeTransfer,
-            card_number: '1501',
             _id: 'any_id',
             createdAt: new Date(),
             updatedAt: new Date(),
