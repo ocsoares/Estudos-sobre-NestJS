@@ -8,6 +8,8 @@ import {
     Transaction,
     TransactionSchema,
 } from '../../repositories/implementations/mongoose/schemas/transaction.schema';
+import { ShowAllAccountTransactionsController } from './use-cases/show-all-account-transactions/show-all-account-transactions.controller';
+import { ShowAllAccountTransactionsService } from './use-cases/show-all-account-transactions/show-all-account-transactions.service';
 
 @Module({
     imports: [
@@ -15,13 +17,14 @@ import {
             { name: Transaction.name, schema: TransactionSchema },
         ]),
     ],
-    controllers: [MakeTransferController],
+    controllers: [MakeTransferController, ShowAllAccountTransactionsController],
     providers: [
         MakeTransferService,
         {
             provide: TransactionRepository,
             useClass: MongooseTransactionRepository,
         },
+        ShowAllAccountTransactionsService,
     ],
 })
 export class TransactionModule {}
