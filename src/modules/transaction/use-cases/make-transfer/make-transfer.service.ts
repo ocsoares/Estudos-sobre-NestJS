@@ -3,7 +3,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { ITransaction } from 'src/models/ITransaction';
-import { UserRepository } from 'src/repositories/abstracts/UserRepository';
+import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
 

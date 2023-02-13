@@ -2,13 +2,16 @@
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { ITransaction } from 'src/models/ITransaction';
+import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
 import { MakeTransferService } from './make-transfer.service';
+import { IUser } from 'src/models/IUser';
 
 describe('MakeTransferService', () => {
     let service: MakeTransferService;
     let transactionRepository: TransactionRepository;
+    let userRepository: UserRepository;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -20,6 +23,12 @@ describe('MakeTransferService', () => {
                         create: jest.fn(),
                     },
                 },
+                {
+                    provide: UserRepository,
+                    useValue: {
+                        findById: jest.fn(),
+                    },
+                },
             ],
         }).compile();
 
@@ -27,6 +36,7 @@ describe('MakeTransferService', () => {
         transactionRepository = module.get<TransactionRepository>(
             TransactionRepository,
         );
+        userRepository = module.get<UserRepository>(UserRepository);
 
         jest.spyOn(service, 'execute');
     });
@@ -34,9 +44,13 @@ describe('MakeTransferService', () => {
     it('should be defined', () => {
         expect(service).toBeDefined();
         expect(transactionRepository).toBeDefined();
+        expect(userRepository).toBeDefined();
     });
 
     it('should make a transfer', async () => {
+        // Mockando porque se o Id EXISTIR, PASSA do If !!!
+        (userRepository.findById as jest.Mock).mockResolvedValue({} as IUser);
+
         const userData: ITransaction = {
             account_id: 'any_account_id',
             transfer_amount: 1250.483742,
@@ -71,6 +85,7 @@ describe('MakeTransferService', () => {
         const makeTransfer = await service.execute(userData);
 
         expect(makeTransfer).toEqual(expectedMakeTransfer);
+        expect(userRepository.findById).toHaveBeenCalledTimes(1);
         expect(service.execute).toHaveBeenCalledTimes(1);
         expect(service.execute).toHaveBeenCalledWith(userData);
     });
