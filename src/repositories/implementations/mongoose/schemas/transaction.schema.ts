@@ -22,7 +22,7 @@ export class Transaction {
     @Prop({ type: String, required: true, enum: ['debit_card', 'credit_card'] })
     payment_method: 'debit_card' | 'credit_card';
 
-    @Prop({ type: String, required: true, minlength: 4, maxlength: 4 })
+    @Prop({ type: String, required: true, minlength: 8, maxlength: 8 })
     card_number: string;
 
     @Prop({ type: String, required: true })

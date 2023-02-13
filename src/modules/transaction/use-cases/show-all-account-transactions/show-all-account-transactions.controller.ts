@@ -4,7 +4,7 @@ import { ShowAllAccountTransactionsService } from './show-all-account-transactio
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 import { IReturnUser } from 'src/interfaces/IReturnUser';
 
-@Controller('show-all-account-transactions')
+@Controller()
 export class ShowAllAccountTransactionsController implements IController {
     constructor(
         private readonly _showAllAccountTransactionsService: ShowAllAccountTransactionsService,

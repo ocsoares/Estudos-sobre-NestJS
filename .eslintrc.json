@@ -57,10 +57,11 @@
                 "leadingUnderscore": "forbid",
                 "trailingUnderscore": "allow"
             },
-            {
-              "selector": "parameter",
-              "format": ["camelCase"]
-            },
+            // Com o abaixo ativado, esse exemplo: account_id É PROIBIDO !!! <<
+            // {
+            //   "selector": "parameter",
+            //   "format": ["camelCase"]
+            // },
             {
                 "selector": "property",
                 "format": ["camelCase", "UPPER_CASE"],

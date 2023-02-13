@@ -10,12 +10,19 @@ import {
 } from '../../repositories/implementations/mongoose/schemas/transaction.schema';
 import { ShowAllAccountTransactionsController } from './use-cases/show-all-account-transactions/show-all-account-transactions.controller';
 import { ShowAllAccountTransactionsService } from './use-cases/show-all-account-transactions/show-all-account-transactions.service';
+import { UserRepository } from 'src/repositories/abstracts/UserRepository';
+import { MongooseUserRepository } from 'src/repositories/implementations/mongoose/user/MongooseUserRepository';
+import {
+    User,
+    UserSchema,
+} from 'src/repositories/implementations/mongoose/schemas/user.schema';
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             { name: Transaction.name, schema: TransactionSchema },
         ]),
+        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ],
     controllers: [MakeTransferController, ShowAllAccountTransactionsController],
     providers: [
@@ -23,6 +30,10 @@ import { ShowAllAccountTransactionsService } from './use-cases/show-all-account-
         {
             provide: TransactionRepository,
             useClass: MongooseTransactionRepository,
+        },
+        {
+            provide: UserRepository,
+            useClass: MongooseUserRepository,
         },
         ShowAllAccountTransactionsService,
     ],

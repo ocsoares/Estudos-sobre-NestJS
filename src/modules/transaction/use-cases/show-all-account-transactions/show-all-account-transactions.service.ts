@@ -1,23 +1,36 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
+import { UserRepository } from 'src/repositories/abstracts/UserRepository';
 import { IReturnTransfer } from '../make-transfer/interfaces/IReturnTransfer';
 
 @Injectable()
 export class ShowAllAccountTransactionsService implements IService {
     constructor(
         private readonly _showAllAccountTransactionsRepository: TransactionRepository,
+        private readonly _userRepository: UserRepository,
     ) {}
 
-    // O Id vai ser passado pelo JWT, que é protegido por um Guard, então se o Id NÃO existir, o próprio
-    // Guard vai cuidar disso !!!
     async execute(id: string): Promise<IReturnTransfer[]> {
-        // FAZER para quando NÃO tiver nenhuma Transação, retornar uma Mensagem falando que ainda não
-        // tem Transações feitas...
+        const userStillExists = await this._userRepository.findById(id);
+
+        if (!userStillExists) {
+            throw new BadRequestException(
+                'Não foi possível encontrar o usuário pelo id fornecido !',
+            );
+        }
+
         const transactions =
             await this._showAllAccountTransactionsRepository.findAllById(id);
+
+        if (transactions.length === 0) {
+            throw new HttpException(
+                'Você ainda não realizou nenhuma transação !',
+                200,
+            );
+        }
 
         const mainTransactionsInformations = transactions.map(
             (prop) =>

@@ -24,7 +24,7 @@ export class MakeTransferService implements IService {
         const makeTransfer = await this._makeTransferRepository.create({
             ...data,
             transfer_amount: fixTransferAmountTwoDecimalPlaces,
-            card_number: lastForDigitsCard,
+            card_number: `...-${lastForDigitsCard}`,
         });
 
         const mainInformationTransfer: IReturnTransfer = {
@@ -32,7 +32,7 @@ export class MakeTransferService implements IService {
             transfer_amount: makeTransfer.transfer_amount,
             description: makeTransfer.description,
             payment_method: makeTransfer.payment_method,
-            card_number: `....-${makeTransfer.card_number}`,
+            card_number: makeTransfer.card_number,
             card_holder: makeTransfer.card_holder,
         };
 

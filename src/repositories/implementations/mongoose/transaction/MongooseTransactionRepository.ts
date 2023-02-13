@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -19,5 +21,13 @@ export class MongooseTransactionRepository implements TransactionRepository {
         const makeTransfer = await this._transactionModel.create(data);
 
         return makeTransfer.toObject();
+    }
+
+    async findAllById(account_id: string): Promise<ITransaction[]> {
+        const transactions = await this._transactionModel.find({ account_id });
+
+        return transactions.map((prop) => ({
+            ...prop.toObject(),
+        }));
     }
 }
