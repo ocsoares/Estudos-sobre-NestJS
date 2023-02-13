@@ -40,7 +40,7 @@ describe('MongooseTransactionRepository', () => {
             transfer_amount: 1250.42, // Fix to Two decimal places in Service (Original = 1250.423742)
             description: 'Iphone X',
             payment_method: 'credit_card',
-            card_number: '1501', // 1501 = Last Four digits in Service (Original = 5286221899691501)
+            card_number: '...-1501', // 1501 = Last Four digits in Service (Original = 5286221899691501)
             card_holder: 'Lucas Batista',
             card_expiration_date: '08/25',
             cvv: '375',
@@ -51,7 +51,7 @@ describe('MongooseTransactionRepository', () => {
             transfer_amount: 1250.42,
             description: 'Iphone X',
             payment_method: 'credit_card',
-            card_number: '1501',
+            card_number: '...-1501',
             card_holder: 'Lucas Batista',
             _id: expect.any(mongoose.Types.ObjectId),
             date: expect.any(Date),
