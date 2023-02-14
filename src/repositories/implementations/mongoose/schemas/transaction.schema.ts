@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type TransactionDocument = HydratedDocument<Transaction>;
 
@@ -9,6 +9,9 @@ export type TransactionDocument = HydratedDocument<Transaction>;
 export class Transaction {
     @Prop({ type: String, required: true })
     account_id: string;
+
+    @Prop({ type: Types.ObjectId, unique: true })
+    transfer_id: Types.ObjectId;
 
     @Prop({ type: Date, required: true, default: Date.now })
     date: Date;

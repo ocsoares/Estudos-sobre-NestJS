@@ -20,6 +20,9 @@ export class MongooseTransactionRepository implements TransactionRepository {
     async create(data: ITransaction): Promise<ITransaction> {
         const makeTransfer = await this._transactionModel.create(data);
 
+        makeTransfer.transfer_id = makeTransfer._id;
+        await makeTransfer.save();
+
         return makeTransfer.toObject();
     }
 

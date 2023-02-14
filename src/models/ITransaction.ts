@@ -2,6 +2,7 @@
 
 export interface ITransaction {
     readonly account_id: string;
+    readonly transfer_id?: string;
     readonly date?: Date;
     readonly transfer_amount: number;
     readonly description: string;

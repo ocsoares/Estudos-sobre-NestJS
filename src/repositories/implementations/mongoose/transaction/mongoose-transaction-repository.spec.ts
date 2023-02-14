@@ -25,6 +25,7 @@ describe('MongooseTransactionRepository', () => {
 
     const expectedMakeTransfer = {
         account_id: testId,
+        transfer_id: expect.any(mongoose.Types.ObjectId),
         transfer_amount: 1250.42,
         description: 'Iphone X',
         payment_method: 'credit_card',
