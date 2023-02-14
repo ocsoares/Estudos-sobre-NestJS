@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { IController, returnHandle } from 'src/interfaces/IController';
 import { ShowAllAccountTransactionsService } from './show-all-account-transactions.service';
-import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
+import { CurrentUser } from '../../../../modules/auth/decorators/current-user.decorator';
 import { IReturnUser } from 'src/interfaces/IReturnUser';
 
 @Controller()

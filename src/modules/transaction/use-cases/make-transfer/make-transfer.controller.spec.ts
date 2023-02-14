@@ -15,11 +15,14 @@ import { TransactionModule } from '../../transaction.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { IUserPayload } from 'src/modules/auth/models/IUserPayload';
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
+import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
+import { IUser } from 'src/models/IUser';
 
 describe('MakeTransferController', () => {
     let app: INestApplication;
     let service: MakeTransferService;
-    let repository: TransactionRepository;
+    let transactionRepository: TransactionRepository;
+    let userRepository: UserRepository;
     let jwtService: JwtService;
     let JWT: string;
     const route = '/transaction';
@@ -55,7 +58,7 @@ describe('MakeTransferController', () => {
         ...userData,
         account_id: payload.sub, // Id do payload a cima, que vai ser o JWT !!
         transfer_amount: fixTransferAmountTwoDecimalPlaces,
-        card_number: lastForDigitsCard,
+        card_number: `...-${lastForDigitsCard}`,
     };
 
     // Por algum motivo, quando aplica o Controller nesse teste, NÃO funciona !!
@@ -93,11 +96,14 @@ describe('MakeTransferController', () => {
         );
 
         service = module.get<MakeTransferService>(MakeTransferService);
-        repository = module.get<TransactionRepository>(TransactionRepository);
+        transactionRepository = module.get<TransactionRepository>(
+            TransactionRepository,
+        );
+        userRepository = module.get<UserRepository>(UserRepository);
         jwtService = module.get<JwtService>(JwtService);
 
         jest.spyOn(jwtService, 'sign');
-        jest.spyOn(repository, 'create');
+        jest.spyOn(transactionRepository, 'create');
         jest.spyOn(service, 'execute');
 
         JWT = jwtService.sign(payload);
@@ -113,7 +119,8 @@ describe('MakeTransferController', () => {
     it('should be defined', () => {
         expect(app).toBeDefined();
         expect(service).toBeDefined();
-        expect(repository).toBeDefined();
+        expect(transactionRepository).toBeDefined();
+        expect(userRepository).toBeDefined();
         expect(jwtService).toBeDefined();
     });
 
@@ -132,7 +139,7 @@ describe('MakeTransferController', () => {
         const expectedMessage = 'Invalid or expired token !';
 
         expect(response.body.message).toEqual(expectedMessage);
-        expect(repository.create).toHaveBeenCalledTimes(0);
+        expect(transactionRepository.create).toHaveBeenCalledTimes(0);
         expect(service.execute).toHaveBeenCalledTimes(0);
     });
 
@@ -167,17 +174,21 @@ describe('MakeTransferController', () => {
             .expect(400);
 
         expect(response.body.message).toEqual(expectedMessage);
-        expect(repository.create).toHaveBeenCalledTimes(0);
+        expect(transactionRepository.create).toHaveBeenCalledTimes(0);
         expect(service.execute).toHaveBeenCalledTimes(0);
     });
 
     it('should make a transfer', async () => {
+        // Como não quero criar um Usuário para ter um ID válido no Banco de Dados
+        // nesse teste, então apenas Mockei !!!
+        jest.spyOn(userRepository, 'findById').mockResolvedValue({} as IUser);
+
         const expectedData: IReturnTransfer = {
             date: expect.any(String),
             transfer_amount: repositoryCreateData.transfer_amount,
             description: repositoryCreateData.description,
             payment_method: repositoryCreateData.payment_method,
-            card_number: `....-${repositoryCreateData.card_number}`,
+            card_number: repositoryCreateData.card_number,
             card_holder: repositoryCreateData.card_holder,
         };
 
@@ -191,7 +202,9 @@ describe('MakeTransferController', () => {
 
         expect(response.body.message).toEqual(expectedMessage);
         expect(response.body.data).toEqual(expectedData);
-        expect(repository.create).toHaveBeenCalledWith(repositoryCreateData);
+        expect(transactionRepository.create).toHaveBeenCalledWith(
+            repositoryCreateData,
+        );
         expect(service.execute).toHaveBeenCalledTimes(1);
         expect(service.execute).toHaveBeenCalledWith({
             // É chamado assim no Controller !!!

@@ -10,12 +10,12 @@ import {
 } from '../../repositories/implementations/mongoose/schemas/transaction.schema';
 import { ShowAllAccountTransactionsController } from './use-cases/show-all-account-transactions/show-all-account-transactions.controller';
 import { ShowAllAccountTransactionsService } from './use-cases/show-all-account-transactions/show-all-account-transactions.service';
-import { UserRepository } from 'src/repositories/abstracts/UserRepository';
-import { MongooseUserRepository } from 'src/repositories/implementations/mongoose/user/MongooseUserRepository';
+import { UserRepository } from '../../repositories/abstracts/UserRepository';
+import { MongooseUserRepository } from '../../repositories/implementations/mongoose/user/MongooseUserRepository';
 import {
     User,
     UserSchema,
-} from 'src/repositories/implementations/mongoose/schemas/user.schema';
+} from '../../repositories/implementations/mongoose/schemas/user.schema';
 
 @Module({
     imports: [

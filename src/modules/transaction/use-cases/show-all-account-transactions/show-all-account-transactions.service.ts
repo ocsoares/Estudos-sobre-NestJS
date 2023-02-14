@@ -2,8 +2,8 @@
 
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
-import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
-import { UserRepository } from 'src/repositories/abstracts/UserRepository';
+import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
+import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { IReturnTransfer } from '../make-transfer/interfaces/IReturnTransfer';
 
 @Injectable()
