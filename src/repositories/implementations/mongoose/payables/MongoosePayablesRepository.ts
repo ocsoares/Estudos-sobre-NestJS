@@ -12,7 +12,7 @@ export class MongoosePayablesRepository implements PayablesRepository {
         private readonly _payablesModel: Model<PayablesDocument>,
     ) {}
 
-    async credit(data: IPayable): Promise<IPayable> {
+    async create(data: IPayable): Promise<IPayable> {
         const generate = await this._payablesModel.create(data);
 
         return generate;

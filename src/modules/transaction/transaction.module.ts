@@ -16,6 +16,7 @@ import {
     User,
     UserSchema,
 } from '../../repositories/implementations/mongoose/schemas/user.schema';
+import { PayablesModule } from '../payables/payables.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import {
             { name: Transaction.name, schema: TransactionSchema },
         ]),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+        PayablesModule,
     ],
     controllers: [MakeTransferController, ShowAllAccountTransactionsController],
     providers: [

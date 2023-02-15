@@ -6,12 +6,16 @@ import { ITransaction } from 'src/models/ITransaction';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
+import { GenerateCreditCardPayableService } from 'src/modules/payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
+import { GenerateDebitCardPayableService } from 'src/modules/payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
 
 @Injectable()
 export class MakeTransferService implements IService {
     constructor(
         private readonly _makeTransferRepository: TransactionRepository,
         private readonly _userRepository: UserRepository,
+        private readonly _generateCreditCardPayableService: GenerateCreditCardPayableService,
+        private readonly _generateDebitCardPayableService: GenerateDebitCardPayableService,
     ) {}
 
     // Id vai ser colocado no Controller, com o ID armazenado no JWT !!
@@ -36,6 +40,16 @@ export class MakeTransferService implements IService {
             transfer_amount: fixTransferAmountTwoDecimalPlaces,
             card_number: `...-${lastForDigitsCard}`,
         });
+
+        if (makeTransfer.payment_method === 'credit_card') {
+            await this._generateCreditCardPayableService.execute(
+                makeTransfer.transfer_id,
+            );
+        } else {
+            await this._generateDebitCardPayableService.execute(
+                makeTransfer.transfer_id,
+            );
+        }
 
         const mainInformationTransfer: IReturnTransfer = {
             date: makeTransfer.date,

@@ -7,9 +7,9 @@ import { PayablesRepository } from 'src/repositories/abstracts/PayablesRepositor
 import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
 
 @Injectable()
-export class GenerateCreditCardPayableService implements IService {
+export class GenerateDebitCardPayableService implements IService {
     constructor(
-        private readonly _generateCreditCardPayableRepository: PayablesRepository,
+        private readonly _generateDebitCardPayableRepository: PayablesRepository,
         private readonly _transactionRepository: TransactionRepository,
     ) {}
 
@@ -18,32 +18,27 @@ export class GenerateCreditCardPayableService implements IService {
             transfer_id,
         );
 
-        if (!transfer_id) {
+        if (!transfer) {
             throw new BadRequestException('Id de transferência inválido !');
         }
 
-        const currentDate = new Date();
-        const currentDateAfterThirtyDays = new Date(
-            currentDate.setDate(currentDate.getDate() + 30),
-        );
-
-        const threePercentProcessingFee = Number(
+        const fivePercentProcessingFee = Number(
             (
                 transfer.transfer_amount -
-                transfer.transfer_amount * 0.03
+                transfer.transfer_amount * 0.05
             ).toFixed(2),
         );
 
-        const makeCreditCardPayable =
-            await this._generateCreditCardPayableRepository.create({
+        const makeDebitCardPayable =
+            await this._generateDebitCardPayableRepository.create({
                 account_id: transfer.account_id,
-                transfer_amount: threePercentProcessingFee,
+                transfer_amount: fivePercentProcessingFee,
                 description: transfer.description,
-                status: 'waiting_funds',
-                payment_date: currentDateAfterThirtyDays,
+                status: 'paid',
+                payment_date: new Date(),
                 transfer_id,
             });
 
-        return makeCreditCardPayable;
+        return makeDebitCardPayable;
     }
 }
