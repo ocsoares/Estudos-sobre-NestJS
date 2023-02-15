@@ -6,8 +6,8 @@ import { ITransaction } from 'src/models/ITransaction';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
-import { GenerateCreditCardPayableService } from 'src/modules/payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
-import { GenerateDebitCardPayableService } from 'src/modules/payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
+import { GenerateCreditCardPayableService } from '../../../../modules/payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
+import { GenerateDebitCardPayableService } from '../../../../modules/payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
 
 @Injectable()
 export class MakeTransferService implements IService {

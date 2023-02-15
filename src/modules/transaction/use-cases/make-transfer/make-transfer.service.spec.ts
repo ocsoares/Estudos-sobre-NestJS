@@ -7,6 +7,10 @@ import { TransactionRepository } from '../../../../repositories/abstracts/Transa
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
 import { MakeTransferService } from './make-transfer.service';
 import { IUser } from 'src/models/IUser';
+import { GenerateCreditCardPayableService } from '../../../../modules/payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
+import { GenerateDebitCardPayableService } from '../../../../modules/payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
+import { PayablesRepository } from '../../../../repositories/abstracts/PayablesRepository';
+import { MongoosePayablesRepository } from '../../../../repositories/implementations/mongoose/payables/MongoosePayablesRepository';
 
 describe('MakeTransferService', () => {
     let service: MakeTransferService;
@@ -27,6 +31,20 @@ describe('MakeTransferService', () => {
                     provide: UserRepository,
                     useValue: {
                         findById: jest.fn(),
+                    },
+                },
+                GenerateCreditCardPayableService,
+                GenerateDebitCardPayableService,
+                {
+                    provide: PayablesRepository,
+                    useValue: {
+                        create: jest.fn(),
+                    },
+                },
+                {
+                    provide: TransactionRepository,
+                    useValue: {
+                        findOneById: jest.fn(),
                     },
                 },
             ],

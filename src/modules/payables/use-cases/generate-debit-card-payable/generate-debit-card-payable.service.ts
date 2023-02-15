@@ -3,8 +3,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { IPayable } from 'src/models/IPayable';
-import { PayablesRepository } from 'src/repositories/abstracts/PayablesRepository';
-import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
+import { PayablesRepository } from '../../../../repositories/abstracts/PayablesRepository';
+import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 
 @Injectable()
 export class GenerateDebitCardPayableService implements IService {
