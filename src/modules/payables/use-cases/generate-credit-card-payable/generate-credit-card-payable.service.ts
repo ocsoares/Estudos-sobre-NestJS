@@ -18,7 +18,7 @@ export class GenerateCreditCardPayableService implements IService {
             transfer_id,
         );
 
-        if (!transfer_id) {
+        if (!transfer) {
             throw new BadRequestException('Id de transferência inválido !');
         }
 
