@@ -26,6 +26,12 @@ export class MongooseTransactionRepository implements TransactionRepository {
         return makeTransfer.toObject();
     }
 
+    async findOneById(transfer_id: string): Promise<ITransaction> {
+        const transaction = await this._transactionModel.findById(transfer_id);
+
+        return transaction.toObject();
+    }
+
     async findAllById(account_id: string): Promise<ITransaction[]> {
         const transactions = await this._transactionModel.find({ account_id });
 
