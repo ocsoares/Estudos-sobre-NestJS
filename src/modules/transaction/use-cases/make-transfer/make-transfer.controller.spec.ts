@@ -19,6 +19,7 @@ import { UserRepository } from '../../../../repositories/abstracts/UserRepositor
 import { IUser } from 'src/models/IUser';
 import { GenerateCreditCardPayableService } from '../../../../modules/payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
 import { GenerateDebitCardPayableService } from '../../../../modules/payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
+import { Types } from 'mongoose';
 
 describe('MakeTransferController', () => {
     let app: INestApplication;
@@ -59,10 +60,18 @@ describe('MakeTransferController', () => {
     const lastForDigitsCard = userData.card_number.slice(12, 16);
 
     const repositoryCreateData = {
-        ...userData,
         account_id: payload.sub, // Id do payload a cima, que vai ser o JWT !!
         transfer_amount: fixTransferAmountTwoDecimalPlaces,
+        description: userData.description,
+        payment_method: userData.payment_method,
         card_number: `...-${lastForDigitsCard}`,
+        card_holder: userData.card_holder,
+        _id: expect.any(Types.ObjectId),
+        date: expect.any(Date),
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+        __v: 0,
+        transfer_id: expect.any(Types.ObjectId),
     };
 
     // Por algum motivo, quando aplica o Controller nesse teste, NÃO funciona !!
@@ -117,6 +126,8 @@ describe('MakeTransferController', () => {
         jest.spyOn(jwtService, 'sign');
         jest.spyOn(transactionRepository, 'create');
         jest.spyOn(service, 'execute');
+        jest.spyOn(generateCreditCardPayableService, 'execute');
+        jest.spyOn(generateDebitCardPayableService, 'execute');
 
         JWT = jwtService.sign(payload);
 
@@ -143,7 +154,7 @@ describe('MakeTransferController', () => {
         expect(jwtService.sign).toHaveBeenCalledWith(payload);
     });
 
-    // FAZER os Testes dos Payables !!!!!!!!! <<<<<<<<<<<
+    // FAZER os Testes (it) com os ERROS dos Payables !!
     it('should NOT make a transfer if the JWT is invalid', async () => {
         const response = await supertest(app.getHttpServer())
             .post(route)
@@ -156,6 +167,12 @@ describe('MakeTransferController', () => {
         expect(response.body.message).toEqual(expectedMessage);
         expect(transactionRepository.create).toHaveBeenCalledTimes(0);
         expect(service.execute).toHaveBeenCalledTimes(0);
+        expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
+        expect(generateDebitCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
     });
 
     it('should NOT make a transfer if the request body data is invalid', async () => {
@@ -191,6 +208,12 @@ describe('MakeTransferController', () => {
         expect(response.body.message).toEqual(expectedMessage);
         expect(transactionRepository.create).toHaveBeenCalledTimes(0);
         expect(service.execute).toHaveBeenCalledTimes(0);
+        expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
+        expect(generateDebitCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
     });
 
     it('should make a transfer', async () => {
@@ -221,11 +244,16 @@ describe('MakeTransferController', () => {
         // expect(transactionRepository.create).toHaveBeenCalledWith(
         //     repositoryCreateData,
         // );
-        expect(service.execute).toHaveBeenCalledTimes(1);
         expect(service.execute).toHaveBeenCalledWith({
             // É chamado assim no Controller !!!
             account_id: payload.sub,
             ...userData,
         });
+        expect(generateCreditCardPayableService.execute).toHaveBeenCalledWith(
+            repositoryCreateData.transfer_id,
+        );
+        expect(generateDebitCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
     });
 });
