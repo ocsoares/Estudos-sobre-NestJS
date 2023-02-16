@@ -17,6 +17,7 @@ import * as supertest from 'supertest';
 import { IUser } from 'src/models/IUser';
 import { ITransaction } from 'src/models/ITransaction';
 import { IReturnTransfer } from '../make-transfer/interfaces/IReturnTransfer';
+import { PayablesModule } from '../../../../modules/payables/payables.module';
 
 describe('ShowAllAccountTransactionsController', () => {
     let app: INestApplication;
@@ -52,6 +53,8 @@ describe('ShowAllAccountTransactionsController', () => {
         {
             // date como any porque a Interface dele é setado como Date, mas o retorno da API
             // converte o tipo Date AUTOMATICAMENTE para string !!!
+            // OBS: Aqui estou Transformando a Data em String igual no Retorno da API (com
+            // toISOString() !! <<
             date: new Date().toISOString() as any,
             transfer_amount: 1250.48,
             description: 'Iphone X',
@@ -69,6 +72,11 @@ describe('ShowAllAccountTransactionsController', () => {
                     secret: process.env.JWT_SECRET,
                     signOptions: { expiresIn: process.env.JWT_EXPIRATION_TEST },
                 }),
+                // Consegui arrumar o erro dos Métodos que NÃO estavam sendo Mockados, porque TransactionModule depende
+                // no código do seu módulo de PayablesModule, e mesmo NÃO usando as suas funcionalidades, PRECISA IMPORTAR !!!
+                // OBS: A ordem de Importação IMPORTA, o Módulo que o outro módulo depende PRECISA vir PRIMEIRO, nesse caso,
+                // TransactionModule depende de PayablesModule, então PayablesModule VEM PRIMEIRO !!!
+                PayablesModule,
                 TransactionModule,
                 InMemoryDbModule,
             ],
