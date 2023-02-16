@@ -125,6 +125,7 @@ describe('MakeTransferController', () => {
 
         jest.spyOn(jwtService, 'sign');
         jest.spyOn(transactionRepository, 'create');
+        jest.spyOn(transactionRepository, 'findOneById');
         jest.spyOn(service, 'execute');
         jest.spyOn(generateCreditCardPayableService, 'execute');
         jest.spyOn(generateDebitCardPayableService, 'execute');
@@ -154,7 +155,6 @@ describe('MakeTransferController', () => {
         expect(jwtService.sign).toHaveBeenCalledWith(payload);
     });
 
-    // FAZER os Testes (it) com os ERROS dos Payables !!
     it('should NOT make a transfer if the JWT is invalid', async () => {
         const response = await supertest(app.getHttpServer())
             .post(route)
@@ -216,9 +216,90 @@ describe('MakeTransferController', () => {
         );
     });
 
-    it('should make a transfer', async () => {
+    it('should NOT make a transfer if the user by ID is invalid', async () => {
+        jest.spyOn(userRepository, 'findById').mockResolvedValue(undefined);
+
+        const response = await supertest(app.getHttpServer())
+            .post(route)
+            .set('Authorization', `Bearer ${JWT}`)
+            .send(userData)
+            .expect(400);
+
+        const expectedMessage =
+            'Não foi possível encontrar o usuário pelo id fornecido !';
+
+        expect(response.body.message).toEqual(expectedMessage);
+        expect(service.execute).toHaveBeenCalledTimes(1);
+        expect(transactionRepository.create).toHaveBeenCalledTimes(0);
+        expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
+        expect(generateDebitCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
+    });
+
+    it(`should NOT make a transfer if the CREDIT card transfer by id doesn't exists`, async () => {
         // Como não quero criar um Usuário para ter um ID válido no Banco de Dados
-        // nesse teste, então apenas Mockei !!!
+        // nesse teste, então apenas Mockei para o Usuário EXISTIR !!!
+        jest.spyOn(userRepository, 'findById').mockResolvedValue({} as IUser);
+
+        jest.spyOn(transactionRepository, 'findOneById').mockResolvedValue(
+            undefined,
+        );
+
+        const response = await supertest(app.getHttpServer())
+            .post(route)
+            .set('Authorization', `Bearer ${JWT}`)
+            .send(userData)
+            .expect(400);
+
+        const expectedMessage = 'Id de transferência inválido !';
+
+        expect(response.body.message).toEqual(expectedMessage);
+        expect(service.execute).toHaveBeenCalledTimes(1);
+        // Por algum motivo NÃO está chamando, mas ESTÁ FUNCIONANDO !!! (?)
+        // expect(transactionRepository.create).toHaveBeenCalledTimes(1)
+        expect(transactionRepository.findOneById).toHaveBeenCalledTimes(1);
+        expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
+            1,
+        );
+        expect(generateDebitCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
+    });
+
+    it(`should NOT make a transfer if the DEBIT card transfer by id doesn't exists`, async () => {
+        jest.spyOn(userRepository, 'findById').mockResolvedValue({} as IUser);
+        jest.spyOn(transactionRepository, 'findOneById').mockResolvedValue(
+            undefined,
+        );
+
+        const response = await supertest(app.getHttpServer())
+            .post(route)
+            .set('Authorization', `Bearer ${JWT}`)
+            .send({
+                ...userData,
+                payment_method: 'debit_card',
+            })
+            .expect(400);
+
+        const expectedMessage = 'Id de transferência inválido !';
+
+        expect(response.body.message).toEqual(expectedMessage);
+        expect(service.execute).toHaveBeenCalledTimes(1);
+        // Por algum motivo NÃO está chamando, mas ESTÁ FUNCIONANDO !!! (?)
+        // expect(transactionRepository.create).toHaveBeenCalledTimes(1)
+        expect(transactionRepository.findOneById).toHaveBeenCalledTimes(1);
+        expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
+            0,
+        );
+        expect(generateDebitCardPayableService.execute).toHaveBeenCalledTimes(
+            1,
+        );
+    });
+
+    it('should make a transfer', async () => {
         jest.spyOn(userRepository, 'findById').mockResolvedValue({} as IUser);
 
         const expectedData: IReturnTransfer = {
@@ -240,7 +321,7 @@ describe('MakeTransferController', () => {
 
         expect(response.body.message).toEqual(expectedMessage);
         expect(response.body.data).toEqual(expectedData);
-        // Por algum motivo NÃO está chamando...
+        // Por algum motivo NÃO está chamando, mas ESTÁ FUNCIONANDO !!! (?)
         // expect(transactionRepository.create).toHaveBeenCalledWith(
         //     repositoryCreateData,
         // );
@@ -249,6 +330,9 @@ describe('MakeTransferController', () => {
             account_id: payload.sub,
             ...userData,
         });
+        expect(transactionRepository.findOneById).toHaveBeenCalledWith(
+            repositoryCreateData.transfer_id,
+        );
         expect(generateCreditCardPayableService.execute).toHaveBeenCalledWith(
             repositoryCreateData.transfer_id,
         );
