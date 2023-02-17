@@ -17,6 +17,14 @@ import {
     UserSchema,
 } from '../../repositories/implementations/mongoose/schemas/user.schema';
 import { PayablesModule } from '../payables/payables.module';
+import {
+    Payables,
+    PayablesSchema,
+} from '../../repositories/implementations/mongoose/schemas/payables.schema';
+import { PayablesRepository } from '../../repositories/abstracts/PayablesRepository';
+import { MongoosePayablesRepository } from '../../repositories/implementations/mongoose/payables/MongoosePayablesRepository';
+import { GenerateCreditCardPayableService } from '../payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
+import { GenerateDebitCardPayableService } from '../payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
 
 @Module({
     imports: [
@@ -24,6 +32,9 @@ import { PayablesModule } from '../payables/payables.module';
             { name: Transaction.name, schema: TransactionSchema },
         ]),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+        MongooseModule.forFeature([
+            { name: Payables.name, schema: PayablesSchema },
+        ]),
         PayablesModule,
     ],
     controllers: [MakeTransferController, ShowAllAccountTransactionsController],
@@ -38,6 +49,16 @@ import { PayablesModule } from '../payables/payables.module';
             useClass: MongooseUserRepository,
         },
         ShowAllAccountTransactionsService,
+
+        // Adicionando esses Services e esses Repositorys, MESMO já IMPORTADOS de
+        // PayablesModule, fez parar o bug dos Métodos NÃO serem Chamados nos
+        // Testes !!! <<<
+        GenerateCreditCardPayableService,
+        GenerateDebitCardPayableService,
+        {
+            provide: PayablesRepository,
+            useClass: MongoosePayablesRepository,
+        },
     ],
 })
 export class TransactionModule {}

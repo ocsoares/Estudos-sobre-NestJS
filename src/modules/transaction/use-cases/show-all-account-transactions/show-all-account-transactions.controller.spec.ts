@@ -72,6 +72,7 @@ describe('ShowAllAccountTransactionsController', () => {
                     secret: process.env.JWT_SECRET,
                     signOptions: { expiresIn: process.env.JWT_EXPIRATION_TEST },
                 }),
+
                 // Consegui arrumar o erro dos Métodos que NÃO estavam sendo Mockados, porque TransactionModule depende
                 // no código do seu módulo de PayablesModule, e mesmo NÃO usando as suas funcionalidades, PRECISA IMPORTAR !!!
                 // OBS: A ordem de Importação IMPORTA, o Módulo que o outro módulo depende PRECISA vir PRIMEIRO, nesse caso,

@@ -11,7 +11,6 @@ import { ConfigModule } from '@nestjs/config';
 import { InMemoryDbModule } from '../../../../modules/in-memory-database/in-memory-database.module';
 import { APP_GUARD } from '@nestjs/core';
 import { MakeTransferDTO } from './dtos/MakeTransferDTO';
-import { TransactionModule } from '../../transaction.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { IUserPayload } from 'src/modules/auth/models/IUserPayload';
 import { IReturnTransfer } from './interfaces/IReturnTransfer';
@@ -19,7 +18,9 @@ import { UserRepository } from '../../../../repositories/abstracts/UserRepositor
 import { IUser } from 'src/models/IUser';
 import { GenerateCreditCardPayableService } from '../../../../modules/payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
 import { GenerateDebitCardPayableService } from '../../../../modules/payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
+import { PayablesModule } from '../../../../modules/payables/payables.module';
 import { Types } from 'mongoose';
+import { TransactionModule } from '../../transaction.module';
 
 describe('MakeTransferController', () => {
     let app: INestApplication;
@@ -59,19 +60,11 @@ describe('MakeTransferController', () => {
 
     const lastForDigitsCard = userData.card_number.slice(12, 16);
 
-    const repositoryCreateData = {
+    const transactionRepositoryCreateData = {
+        ...userData,
         account_id: payload.sub, // Id do payload a cima, que vai ser o JWT !!
         transfer_amount: fixTransferAmountTwoDecimalPlaces,
-        description: userData.description,
-        payment_method: userData.payment_method,
         card_number: `...-${lastForDigitsCard}`,
-        card_holder: userData.card_holder,
-        _id: expect.any(Types.ObjectId),
-        date: expect.any(Date),
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-        __v: 0,
-        transfer_id: expect.any(Types.ObjectId),
     };
 
     // Por algum motivo, quando aplica o Controller nesse teste, NÃO funciona !!
@@ -86,6 +79,14 @@ describe('MakeTransferController', () => {
                     secret: process.env.JWT_SECRET,
                     signOptions: { expiresIn: process.env.JWT_EXPIRATION_TEST },
                 }),
+
+                // Consegui arrumar o erro dos Métodos que NÃO estavam sendo Mockados, porque TransactionModule depende
+                // no código do seu módulo de PayablesModule, e mesmo NÃO usando as suas funcionalidades, PRECISA IMPORTAR !!!
+                // OBS: A ordem de Importação IMPORTA, o Módulo que o outro módulo depende PRECISA vir PRIMEIRO, nesse caso,
+                // TransactionModule depende de PayablesModule, então PayablesModule VEM PRIMEIRO !!!
+                // OBS: Nesse teste, tive que adicionar os Services e Repositorys JÁ IMPORTADOS de PayablesModules para o
+                // TransactionModule (está comentado lá explicando) para que os Métodos parassem de NÃO serem Chamados !!!
+                PayablesModule,
                 TransactionModule,
                 InMemoryDbModule,
             ],
@@ -166,6 +167,7 @@ describe('MakeTransferController', () => {
 
         expect(response.body.message).toEqual(expectedMessage);
         expect(transactionRepository.create).toHaveBeenCalledTimes(0);
+        expect(transactionRepository.findOneById).toHaveBeenCalledTimes(0);
         expect(service.execute).toHaveBeenCalledTimes(0);
         expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
             0,
@@ -207,6 +209,7 @@ describe('MakeTransferController', () => {
 
         expect(response.body.message).toEqual(expectedMessage);
         expect(transactionRepository.create).toHaveBeenCalledTimes(0);
+        expect(transactionRepository.findOneById).toHaveBeenCalledTimes(0);
         expect(service.execute).toHaveBeenCalledTimes(0);
         expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
             0,
@@ -231,6 +234,7 @@ describe('MakeTransferController', () => {
         expect(response.body.message).toEqual(expectedMessage);
         expect(service.execute).toHaveBeenCalledTimes(1);
         expect(transactionRepository.create).toHaveBeenCalledTimes(0);
+        expect(transactionRepository.findOneById).toHaveBeenCalledTimes(0);
         expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
             0,
         );
@@ -258,8 +262,7 @@ describe('MakeTransferController', () => {
 
         expect(response.body.message).toEqual(expectedMessage);
         expect(service.execute).toHaveBeenCalledTimes(1);
-        // Por algum motivo NÃO está chamando, mas ESTÁ FUNCIONANDO !!! (?)
-        // expect(transactionRepository.create).toHaveBeenCalledTimes(1)
+        expect(transactionRepository.create).toHaveBeenCalledTimes(1);
         expect(transactionRepository.findOneById).toHaveBeenCalledTimes(1);
         expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
             1,
@@ -288,8 +291,7 @@ describe('MakeTransferController', () => {
 
         expect(response.body.message).toEqual(expectedMessage);
         expect(service.execute).toHaveBeenCalledTimes(1);
-        // Por algum motivo NÃO está chamando, mas ESTÁ FUNCIONANDO !!! (?)
-        // expect(transactionRepository.create).toHaveBeenCalledTimes(1)
+        expect(transactionRepository.create).toHaveBeenCalledTimes(1);
         expect(transactionRepository.findOneById).toHaveBeenCalledTimes(1);
         expect(generateCreditCardPayableService.execute).toHaveBeenCalledTimes(
             0,
@@ -304,11 +306,11 @@ describe('MakeTransferController', () => {
 
         const expectedData: IReturnTransfer = {
             date: expect.any(String),
-            transfer_amount: repositoryCreateData.transfer_amount,
-            description: repositoryCreateData.description,
-            payment_method: repositoryCreateData.payment_method,
-            card_number: repositoryCreateData.card_number,
-            card_holder: repositoryCreateData.card_holder,
+            transfer_amount: transactionRepositoryCreateData.transfer_amount,
+            description: transactionRepositoryCreateData.description,
+            payment_method: transactionRepositoryCreateData.payment_method,
+            card_number: transactionRepositoryCreateData.card_number,
+            card_holder: transactionRepositoryCreateData.card_holder,
         };
 
         const expectedMessage = 'Transferência realizada com sucesso !';
@@ -321,20 +323,21 @@ describe('MakeTransferController', () => {
 
         expect(response.body.message).toEqual(expectedMessage);
         expect(response.body.data).toEqual(expectedData);
-        // Por algum motivo NÃO está chamando, mas ESTÁ FUNCIONANDO !!! (?)
-        // expect(transactionRepository.create).toHaveBeenCalledWith(
-        //     repositoryCreateData,
-        // );
+        // Testa os Dados que foram usados para CHAMAR o Método, e NÃO
+        // o Retorno !!!
+        expect(transactionRepository.create).toHaveBeenCalledWith(
+            transactionRepositoryCreateData,
+        );
         expect(service.execute).toHaveBeenCalledWith({
             // É chamado assim no Controller !!!
             account_id: payload.sub,
             ...userData,
         });
         expect(transactionRepository.findOneById).toHaveBeenCalledWith(
-            repositoryCreateData.transfer_id,
+            expect.any(Types.ObjectId),
         );
         expect(generateCreditCardPayableService.execute).toHaveBeenCalledWith(
-            repositoryCreateData.transfer_id,
+            expect.any(Types.ObjectId),
         );
         expect(generateDebitCardPayableService.execute).toHaveBeenCalledTimes(
             0,

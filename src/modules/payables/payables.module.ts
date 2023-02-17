@@ -26,6 +26,7 @@ import { GenerateDebitCardPayableService } from './use-cases/generate-debit-card
     ],
     providers: [
         GenerateCreditCardPayableService,
+        GenerateDebitCardPayableService,
         {
             provide: PayablesRepository,
             useClass: MongoosePayablesRepository,
@@ -34,7 +35,6 @@ import { GenerateDebitCardPayableService } from './use-cases/generate-debit-card
             provide: TransactionRepository,
             useClass: MongooseTransactionRepository,
         },
-        GenerateDebitCardPayableService,
     ],
     exports: [
         GenerateCreditCardPayableService,
