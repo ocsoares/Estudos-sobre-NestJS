@@ -14,6 +14,8 @@ import {
 import { MongooseTransactionRepository } from '../../repositories/implementations/mongoose/transaction/MongooseTransactionRepository';
 import { GenerateCreditCardPayableService } from './use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
 import { GenerateDebitCardPayableService } from './use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
+import { ShowAllPayablesController } from './use-cases/show-all-payables/show-all-payables.controller';
+import { ShowAllPayablesService } from './use-cases/show-all-payables/show-all-payables.service';
 
 @Module({
     imports: [
@@ -35,10 +37,12 @@ import { GenerateDebitCardPayableService } from './use-cases/generate-debit-card
             provide: TransactionRepository,
             useClass: MongooseTransactionRepository,
         },
+        ShowAllPayablesService,
     ],
     exports: [
         GenerateCreditCardPayableService,
         GenerateDebitCardPayableService,
     ],
+    controllers: [ShowAllPayablesController],
 })
 export class PayablesModule {}

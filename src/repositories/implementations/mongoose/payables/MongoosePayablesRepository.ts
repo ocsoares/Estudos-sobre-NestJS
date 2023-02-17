@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -16,5 +18,13 @@ export class MongoosePayablesRepository implements PayablesRepository {
         const generate = await this._payablesModel.create(data);
 
         return generate;
+    }
+
+    async findAllByAccountId(account_id: string): Promise<IPayable[]> {
+        const findAll = await this._payablesModel.find({ account_id });
+
+        return findAll.map((prop) => ({
+            ...prop.toObject(),
+        }));
     }
 }
