@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
-import { IReturnPayable } from 'src/interfaces/IReturnPayable';
-import { IService } from 'src/interfaces/IService';
-import { PayablesRepository } from 'src/repositories/abstracts/PayablesRepository';
-import { UserRepository } from 'src/repositories/abstracts/UserRepository';
+import { IReturnPayable } from '../../../../interfaces/IReturnPayable';
+import { IService } from '../../../../interfaces/IService';
+import { PayablesRepository } from '../../../../repositories/abstracts/PayablesRepository';
+import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 
 @Injectable()
 export class ShowAllDebitPayablesService implements IService {

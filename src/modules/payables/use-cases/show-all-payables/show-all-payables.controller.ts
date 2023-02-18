@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { IController, returnHandle } from 'src/interfaces/IController';
+import { IController, returnHandle } from '../../../../interfaces/IController';
 import { CurrentUser } from '../../../../modules/auth/decorators/current-user.decorator';
 import { ShowAllPayablesService } from './show-all-payables.service';
 import { IReturnUser } from '../../../../interfaces/IReturnUser';
