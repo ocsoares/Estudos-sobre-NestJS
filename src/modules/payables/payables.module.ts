@@ -22,6 +22,8 @@ import { GenerateCreditCardPayableService } from './use-cases/generate-credit-ca
 import { GenerateDebitCardPayableService } from './use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
 import { ShowAllPayablesController } from './use-cases/show-all-payables/show-all-payables.controller';
 import { ShowAllPayablesService } from './use-cases/show-all-payables/show-all-payables.service';
+import { ShowAllCreditPayablesService } from './use-cases/show-all-credit-payables/show-all-credit-payables.service';
+import { ShowAllCreditPayablesController } from './use-cases/show-all-credit-payables/show-all-credit-payables.controller';
 
 @Module({
     imports: [
@@ -33,7 +35,7 @@ import { ShowAllPayablesService } from './use-cases/show-all-payables/show-all-p
         ]),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ],
-    controllers: [ShowAllPayablesController],
+    controllers: [ShowAllPayablesController, ShowAllCreditPayablesController],
     providers: [
         GenerateCreditCardPayableService,
         GenerateDebitCardPayableService,
@@ -50,6 +52,7 @@ import { ShowAllPayablesService } from './use-cases/show-all-payables/show-all-p
             useClass: MongooseUserRepository,
         },
         ShowAllPayablesService,
+        ShowAllCreditPayablesService,
     ],
     exports: [
         GenerateCreditCardPayableService,

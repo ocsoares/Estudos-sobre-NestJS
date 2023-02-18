@@ -21,9 +21,22 @@ export class MongoosePayablesRepository implements PayablesRepository {
     }
 
     async findAllByAccountId(account_id: string): Promise<IPayable[]> {
-        const findAll = await this._payablesModel.find({ account_id });
+        const payables = await this._payablesModel.find({ account_id });
 
-        return findAll.map((prop) => ({
+        return payables.map((prop) => ({
+            ...prop.toObject(),
+        }));
+    }
+
+    async findAllCreditPayablesByAccountId(
+        account_id: string,
+    ): Promise<IPayable[]> {
+        const creditPayables = await this._payablesModel.find({
+            account_id,
+            status: 'waiting_funds',
+        });
+
+        return creditPayables.map((prop) => ({
             ...prop.toObject(),
         }));
     }
