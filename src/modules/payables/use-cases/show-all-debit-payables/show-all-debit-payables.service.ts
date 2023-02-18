@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { IReturnPayable } from 'src/interfaces/IReturnPayable';
 import { IService } from 'src/interfaces/IService';
 import { PayablesRepository } from 'src/repositories/abstracts/PayablesRepository';
@@ -26,6 +26,13 @@ export class ShowAllDebitPayablesService implements IService {
             await this._showAllDebitPayablesRepository.findAllDebitPayablesByAccountId(
                 account_id,
             );
+
+        if (debitPayables.length === 0) {
+            throw new HttpException(
+                'Você ainda não tem nenhum payable de débito !',
+                200,
+            );
+        }
 
         const mainInformation = debitPayables.map(
             (prop) =>
