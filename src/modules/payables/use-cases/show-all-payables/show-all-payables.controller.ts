@@ -10,7 +10,7 @@ export class ShowAllPayablesController implements IController {
         private readonly _showAllPayablesService: ShowAllPayablesService,
     ) {}
 
-    @Get('payable')
+    @Get('payables')
     async handle(@CurrentUser() user: IReturnUser): Promise<returnHandle> {
         const payables = await this._showAllPayablesService.execute(user.id);
 
