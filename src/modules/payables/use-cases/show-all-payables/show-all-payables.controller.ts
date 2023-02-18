@@ -1,4 +1,22 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { IController, returnHandle } from 'src/interfaces/IController';
+import { CurrentUser } from '../../../../modules/auth/decorators/current-user.decorator';
+import { ShowAllPayablesService } from './show-all-payables.service';
+import { IReturnUser } from '../../../../interfaces/IReturnUser';
 
-@Controller('show-all-payables')
-export class ShowAllPayablesController {}
+@Controller()
+export class ShowAllPayablesController implements IController {
+    constructor(
+        private readonly _showAllPayablesService: ShowAllPayablesService,
+    ) {}
+
+    @Get('payable')
+    async handle(@CurrentUser() user: IReturnUser): Promise<returnHandle> {
+        const payables = await this._showAllPayablesService.execute(user.id);
+
+        return {
+            message: 'Seus payables foram encontrados com sucesso !',
+            data: payables,
+        };
+    }
+}

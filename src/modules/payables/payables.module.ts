@@ -1,5 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserRepository } from '../../repositories/abstracts/UserRepository';
+import {
+    User,
+    UserSchema,
+} from '../../repositories/implementations/mongoose/schemas/user.schema';
+import { MongooseUserRepository } from '../../repositories/implementations/mongoose/user/MongooseUserRepository';
 import { PayablesRepository } from '../../repositories/abstracts/PayablesRepository';
 import { TransactionRepository } from '../../repositories/abstracts/TransactionRepository';
 import { MongoosePayablesRepository } from '../../repositories/implementations/mongoose/payables/MongoosePayablesRepository';
@@ -25,7 +31,9 @@ import { ShowAllPayablesService } from './use-cases/show-all-payables/show-all-p
         MongooseModule.forFeature([
             { name: Transaction.name, schema: TransactionSchema },
         ]),
+        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ],
+    controllers: [ShowAllPayablesController],
     providers: [
         GenerateCreditCardPayableService,
         GenerateDebitCardPayableService,
@@ -37,12 +45,15 @@ import { ShowAllPayablesService } from './use-cases/show-all-payables/show-all-p
             provide: TransactionRepository,
             useClass: MongooseTransactionRepository,
         },
+        {
+            provide: UserRepository,
+            useClass: MongooseUserRepository,
+        },
         ShowAllPayablesService,
     ],
     exports: [
         GenerateCreditCardPayableService,
         GenerateDebitCardPayableService,
     ],
-    controllers: [ShowAllPayablesController],
 })
 export class PayablesModule {}
