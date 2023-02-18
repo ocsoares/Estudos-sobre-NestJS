@@ -49,6 +49,7 @@ describe('UserController', () => {
         // IMPORTANTE: Nesse caso, o userService.execute() é responsável por Fornecer os DADOS do Usuário Criado,
         // no objeto data !!!
         jest.spyOn(userService, 'execute');
+        jest.spyOn(repository, 'create');
 
         await app.init();
     });
@@ -72,10 +73,9 @@ describe('UserController', () => {
             password: 'johndoe123',
         };
 
-        const userDataAnyPassword: CreateUserDTO = {
+        const expectedBodyResponse = {
             name: userData.name,
             email: userData.email,
-            password: expect.any(String),
         };
 
         const response = await request(app.getHttpServer())
@@ -83,13 +83,19 @@ describe('UserController', () => {
             .send(userData)
             .expect(201);
 
+        const createdUser = await repository.findByEmail(userData.email);
+
         const isValidEncryptedPassword = await bcrypt.compare(
             userData.password,
-            response.body.data.password,
+            createdUser.password,
         );
 
-        expect(response.body.data).toEqual(userDataAnyPassword);
+        expect(response.body.data).toEqual(expectedBodyResponse);
         expect(isValidEncryptedPassword).toBe(true);
+        expect(repository.create).toHaveBeenCalledWith({
+            ...userData,
+            password: createdUser.password,
+        });
         expect(userService.execute).toHaveBeenCalledTimes(1);
         expect(userService.execute).toHaveBeenCalledWith(userData);
     });

@@ -100,27 +100,34 @@ describe('CreateUserService', () => {
             password: 'testeuser123',
         };
 
-        const userDataAnyPassword: IUser = {
+        const repositoryCreateData = {
+            ...userData,
+            password: await bcript.hash(userData.password, 10),
+        };
+
+        const userDataWithoutPassword = {
             name: userData.name,
             email: userData.email,
-            password: expect.any(String), // Assim porque a senha vem ALEATÓRIA do tipo String, porque causa do bcript !!!
         };
 
         (repository.create as jest.Mock).mockResolvedValue(<IUser>{
-            name: userData.name,
-            email: userData.email,
-            password: await bcript.hash(userData.password, 10),
+            ...repositoryCreateData,
         });
 
         const createUser = await service.execute(userData);
 
         const isValidEncryptedPassword = await bcript.compare(
             userData.password,
-            createUser.password,
+            repositoryCreateData.password,
         );
 
-        expect(createUser).toEqual(userDataAnyPassword);
+        expect(createUser).toEqual(userDataWithoutPassword);
         expect(isValidEncryptedPassword).toBe(true);
-        expect(repository.create).toHaveBeenCalledWith(userDataAnyPassword);
+        expect(repository.create).toHaveBeenCalledWith({
+            // Por algum motivo o JWT de password está sendo chamado NOVAMENTE,
+            // o que faz retornar um JWT DIFERENTE, por isso coloquei como expect...
+            ...repositoryCreateData,
+            password: expect.any(String),
+        });
     });
 });

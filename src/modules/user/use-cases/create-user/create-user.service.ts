@@ -2,14 +2,14 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { IUser } from 'src/models/IUser';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
-import { CreateUserDTO } from './dtos/CreateUserDTO';
 import * as bcrypt from 'bcrypt';
+import { IReturnUser } from 'src/interfaces/IReturnUser';
 
 @Injectable()
 export class CreateUserService implements IService {
     constructor(private readonly _createUserRepository: UserRepository) {}
 
-    async execute(data: IUser): Promise<CreateUserDTO> {
+    async execute(data: IUser): Promise<IReturnUser> {
         const userAlreadyExists = await this._createUserRepository.findByName(
             data.name,
         );
@@ -36,10 +36,9 @@ export class CreateUserService implements IService {
             password: await bcrypt.hash(data.password, 10),
         });
 
-        const mainInformationUser: CreateUserDTO = {
+        const mainInformationUser: IReturnUser = {
             name: createUser.name,
             email: createUser.email,
-            password: createUser.password,
         };
 
         return mainInformationUser;
