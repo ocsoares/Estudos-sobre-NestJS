@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { IReturnPayable } from 'src/interfaces/IReturnPayable';
 import { IService } from '../../../../interfaces/IService';
-import { IPayable } from '../../../../models/IPayable';
 import { PayablesRepository } from '../../../../repositories/abstracts/PayablesRepository';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 
@@ -13,7 +13,7 @@ export class ShowAllPayablesService implements IService {
         private readonly _userRepository: UserRepository,
     ) {}
 
-    async execute(account_id: string): Promise<IPayable[]> {
+    async execute(account_id: string): Promise<IReturnPayable[]> {
         const userStillExists = await this._userRepository.findById(account_id);
 
         if (!userStillExists) {
@@ -33,7 +33,7 @@ export class ShowAllPayablesService implements IService {
 
         const mainInformation = payables.map(
             (prop) =>
-                <IPayable>{
+                <IReturnPayable>{
                     transfer_amount: prop.transfer_amount,
                     description: prop.description,
                     status: prop.status,
