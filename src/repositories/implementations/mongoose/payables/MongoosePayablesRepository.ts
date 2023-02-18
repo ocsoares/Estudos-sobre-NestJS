@@ -40,4 +40,17 @@ export class MongoosePayablesRepository implements PayablesRepository {
             ...prop.toObject(),
         }));
     }
+
+    async findAllDebitPayablesByAccountId(
+        account_id: string,
+    ): Promise<IPayable[]> {
+        const debitPayables = await this._payablesModel.find({
+            account_id,
+            status: 'paid',
+        });
+
+        return debitPayables.map((prop) => ({
+            ...prop.toObject(),
+        }));
+    }
 }

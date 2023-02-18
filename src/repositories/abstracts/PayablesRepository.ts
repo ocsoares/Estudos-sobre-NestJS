@@ -6,4 +6,7 @@ export abstract class PayablesRepository {
     abstract findAllCreditPayablesByAccountId(
         account_id: string,
     ): Promise<IPayable[]>;
+    abstract findAllDebitPayablesByAccountId(
+        account_id: string,
+    ): Promise<IPayable[]>;
 }
