@@ -37,7 +37,11 @@ import { ShowAllDebitPayablesService } from './use-cases/show-all-debit-payables
         ]),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ],
-    controllers: [ShowAllPayablesController, ShowAllCreditPayablesController, ShowAllDebitPayablesController],
+    controllers: [
+        ShowAllPayablesController,
+        ShowAllCreditPayablesController,
+        ShowAllDebitPayablesController,
+    ],
     providers: [
         GenerateCreditCardPayableService,
         GenerateDebitCardPayableService,
