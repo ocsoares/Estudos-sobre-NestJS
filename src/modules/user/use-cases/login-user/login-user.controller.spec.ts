@@ -13,7 +13,7 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigModule } from '@nestjs/config';
 import { IReturnUser } from 'src/interfaces/IReturnUser';
-import { LoginValidationBodyModule } from '../../../../modules/test/login-validation-body/login-validation-body.module';
+import { LoginValidationBodyModule } from '../../../../modules/login-validation-body/login-validation-body.module';
 
 describe('LoginUserController', () => {
     let app: INestApplication;

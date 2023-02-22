@@ -1,23 +1,4 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserRepository } from '../../repositories/abstracts/UserRepository';
-import {
-    User,
-    UserSchema,
-} from '../../repositories/implementations/mongoose/schemas/user.schema';
-import { MongooseUserRepository } from '../../repositories/implementations/mongoose/user/MongooseUserRepository';
-import { PayablesRepository } from '../../repositories/abstracts/PayablesRepository';
-import { TransactionRepository } from '../../repositories/abstracts/TransactionRepository';
-import { MongoosePayablesRepository } from '../../repositories/implementations/mongoose/payables/MongoosePayablesRepository';
-import {
-    Payables,
-    PayablesSchema,
-} from '../../repositories/implementations/mongoose/schemas/payables.schema';
-import {
-    Transaction,
-    TransactionSchema,
-} from '../../repositories/implementations/mongoose/schemas/transaction.schema';
-import { MongooseTransactionRepository } from '../../repositories/implementations/mongoose/transaction/MongooseTransactionRepository';
 import { GenerateCreditCardPayableService } from './use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
 import { GenerateDebitCardPayableService } from './use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
 import { ShowAllPayablesController } from './use-cases/show-all-payables/show-all-payables.controller';
@@ -26,17 +7,10 @@ import { ShowAllCreditPayablesService } from './use-cases/show-all-credit-payabl
 import { ShowAllCreditPayablesController } from './use-cases/show-all-credit-payables/show-all-credit-payables.controller';
 import { ShowAllDebitPayablesController } from './use-cases/show-all-debit-payables/show-all-debit-payables.controller';
 import { ShowAllDebitPayablesService } from './use-cases/show-all-debit-payables/show-all-debit-payables.service';
+import { MongooseDatabaseModule } from '../../repositories/implementations/mongoose/mongoose-database.module';
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([
-            { name: Payables.name, schema: PayablesSchema },
-        ]),
-        MongooseModule.forFeature([
-            { name: Transaction.name, schema: TransactionSchema },
-        ]),
-        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    ],
+    imports: [MongooseDatabaseModule],
     controllers: [
         ShowAllPayablesController,
         ShowAllCreditPayablesController,
@@ -45,18 +19,6 @@ import { ShowAllDebitPayablesService } from './use-cases/show-all-debit-payables
     providers: [
         GenerateCreditCardPayableService,
         GenerateDebitCardPayableService,
-        {
-            provide: PayablesRepository,
-            useClass: MongoosePayablesRepository,
-        },
-        {
-            provide: TransactionRepository,
-            useClass: MongooseTransactionRepository,
-        },
-        {
-            provide: UserRepository,
-            useClass: MongooseUserRepository,
-        },
         ShowAllPayablesService,
         ShowAllCreditPayablesService,
         ShowAllDebitPayablesService,

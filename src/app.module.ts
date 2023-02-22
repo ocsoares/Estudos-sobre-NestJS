@@ -6,8 +6,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
-import { LoginValidationBodyModule } from './modules/test/login-validation-body/login-validation-body.module';
 import { PayablesModule } from './modules/payables/payables.module';
+import { LoginValidationBodyModule } from './modules/login-validation-body/login-validation-body.module';
 
 @Module({
     imports: [
@@ -15,6 +15,8 @@ import { PayablesModule } from './modules/payables/payables.module';
             isGlobal: true,
             envFilePath: '.env',
         }),
+        // Conexão do Banco de Dados aqui porque no Módulo do Mongoose iria fazer com que os Testes
+        // Conectassem no Banco de Dados REAL ao invés do In Memory !!!
         MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
         UserModule,
         AuthModule,
@@ -22,7 +24,6 @@ import { PayablesModule } from './modules/payables/payables.module';
         LoginValidationBodyModule,
         PayablesModule,
     ],
-    controllers: [],
     providers: [
         {
             // Ativa GLOBALMENTE o JwtAuthGuard para a Aplicação, e para DESATIVAR para uma Rota,
