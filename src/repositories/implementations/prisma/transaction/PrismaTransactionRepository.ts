@@ -2,9 +2,11 @@
 
 import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
 import { PrismaService } from '../prisma-client.service';
-import { Prisma } from '@prisma/client';
+import { PaymentMethod, Prisma } from '@prisma/client';
 import { IReturnTransaction } from 'src/interfaces/IReturnTransaction';
 
+// Esse "Prisma.TransactionUncheckedCreateInput" é Gerado AUTOMATICAMENTE pelo Prisma,
+// e serve para receber os Dados de ENTRADA NECESSÁRIOS do Usuário !!!
 class PrismaTransaction implements Prisma.TransactionUncheckedCreateInput {
     readonly id?: string;
     readonly account_id: string;
@@ -12,7 +14,7 @@ class PrismaTransaction implements Prisma.TransactionUncheckedCreateInput {
     readonly date?: string | Date;
     readonly transfer_amount: number;
     readonly description: string;
-    readonly payment_method: 'debit_card' | 'credit_card';
+    readonly payment_method: PaymentMethod;
     readonly card_number: string;
     readonly card_holder: string;
     readonly createdAt?: string | Date;
