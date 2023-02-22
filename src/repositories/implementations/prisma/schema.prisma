@@ -31,10 +31,10 @@ enum PaymentMethod {
 }
 
 model Transaction {
-    id              Int           @id @default(autoincrement())
+    id              String        @id @default(uuid())
     account         User          @relation(fields: [account_id], references: [id])
     account_id      String
-    transfer_id     Int // Linkar com o PRÓPRIO id do Transaction...
+    transfer_id     String // Linkar com o PRÓPRIO id do Transaction...
     date            DateTime      @default(now())
     transfer_amount Int
     description     String
@@ -53,10 +53,10 @@ enum Status {
 }
 
 model Payables {
-    id              Int      @id @default(autoincrement())
+    id              String   @id @default(uuid())
     account         User     @relation(fields: [account_id], references: [id])
     account_id      String
-    transfer_id     Int
+    transfer_id     String
     transfer_amount Int
     description     String
     status          Status
