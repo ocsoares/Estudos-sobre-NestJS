@@ -53,18 +53,17 @@
             "error",
             {
                 "selector": "variable",
-                "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+                "format": ["camelCase", "PascalCase", "UPPER_CASE", "snake_case"],
                 "leadingUnderscore": "forbid",
                 "trailingUnderscore": "allow"
             },
-            // Com o abaixo ativado, esse exemplo: account_id É PROIBIDO !!! <<
-            // {
-            //   "selector": "parameter",
-            //   "format": ["camelCase"]
-            // },
+            {
+              "selector": "parameter",
+              "format": ["camelCase", "snake_case"]
+            },
             {
                 "selector": "property",
-                "format": ["camelCase", "UPPER_CASE"],
+                "format": ["camelCase", "UPPER_CASE", "snake_case"],
                 "leadingUnderscore": "allow",
                 "trailingUnderscore": "allow"
             },
