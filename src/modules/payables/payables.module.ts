@@ -8,7 +8,7 @@ import { ShowAllCreditPayablesController } from './use-cases/show-all-credit-pay
 import { ShowAllDebitPayablesController } from './use-cases/show-all-debit-payables/show-all-debit-payables.controller';
 import { ShowAllDebitPayablesService } from './use-cases/show-all-debit-payables/show-all-debit-payables.service';
 // import { MongooseDatabaseModule } from '../../repositories/implementations/mongoose/mongoose-database.module';
-import { PrismaDatabaseModule } from 'src/repositories/implementations/prisma/prisma-database.module';
+import { PrismaDatabaseModule } from '../../repositories/implementations/prisma/prisma-database.module';
 
 @Module({
     imports: [PrismaDatabaseModule],

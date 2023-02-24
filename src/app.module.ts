@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-// import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
@@ -19,7 +19,7 @@ import { LoginValidationBodyModule } from './modules/login-validation-body/login
         // Conectassem no Banco de Dados REAL ao invés do In Memory !!!
         // OBS: Está comentado porque estou usando o Prisma, para testar a Implementação de OUTRO
         // Banco de Dados !!
-        // MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
+        MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
         UserModule,
         AuthModule,
         TransactionModule,

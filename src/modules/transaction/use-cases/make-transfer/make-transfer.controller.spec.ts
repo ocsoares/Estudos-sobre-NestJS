@@ -1,5 +1,3 @@
-
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';
 import { MakeTransferService } from './make-transfer.service';
@@ -8,7 +6,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../../modules/auth/guards/jwt-auth.guard';
 import { JwtStrategy } from '../../../../modules/auth/strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
-import { InMemoryDbModule } from '../../../../modules/in-memory-database/in-memory-database.module';
+import { InMemoryDbModule } from '../../../../modules/test/in-memory-database/in-memory-database.module';
 import { APP_GUARD } from '@nestjs/core';
 import { MakeTransferDTO } from './dtos/MakeTransferDTO';
 import { JwtModule, JwtService } from '@nestjs/jwt';
@@ -21,6 +19,9 @@ import { GenerateDebitCardPayableService } from '../../../../modules/payables/us
 import { PayablesModule } from '../../../../modules/payables/payables.module';
 import { Types } from 'mongoose';
 import { TransactionModule } from '../../transaction.module';
+
+// IMPORTANTE: NÃO consegui mockar o PostgreSQL porque ele NÃO TEM suporte a In Memory, então quando
+// for testar, MUDAR os Módulos do use-case para Mongoose !!! <<<<<<<<<
 
 describe('MakeTransferController', () => {
     let app: INestApplication;
@@ -60,8 +61,11 @@ describe('MakeTransferController', () => {
 
     const lastForDigitsCard = userData.card_number.slice(12, 16);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { card_expiration_date, cvv, ...createData } = userData;
+
     const transactionRepositoryCreateData = {
-        ...userData,
+        ...createData,
         account_id: payload.sub, // Id do payload a cima, que vai ser o JWT !!
         transfer_amount: fixTransferAmountTwoDecimalPlaces,
         card_number: `...-${lastForDigitsCard}`,

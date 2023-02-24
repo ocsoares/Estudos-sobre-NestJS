@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PayablesRepository } from 'src/repositories/abstracts/PayablesRepository';
-import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
-import { UserRepository } from 'src/repositories/abstracts/UserRepository';
+import { PayablesRepository } from '../../../repositories/abstracts/PayablesRepository';
+import { TransactionRepository } from '../../../repositories/abstracts/TransactionRepository';
+import { UserRepository } from '../../../repositories/abstracts/UserRepository';
 import { PrismaPayablesRepository } from './payables/PrismaPayablesRepository';
 import { PrismaService } from './prisma-client.service';
 import { PrismaTransactionRepository } from './transaction/PrismaTransactionRepository';

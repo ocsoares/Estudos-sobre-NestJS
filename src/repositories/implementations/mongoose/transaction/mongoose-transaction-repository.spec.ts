@@ -2,7 +2,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
 import { ITransaction } from 'src/models/ITransaction';
-import { InMemoryDbModule } from '../../../../modules/in-memory-database/in-memory-database.module';
+import { InMemoryDbModule } from '../../../../modules/test/in-memory-database/in-memory-database.module';
 import { Transaction, TransactionSchema } from '../schemas/transaction.schema';
 import { MongooseTransactionRepository } from './MongooseTransactionRepository';
 

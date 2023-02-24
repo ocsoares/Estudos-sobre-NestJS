@@ -5,7 +5,7 @@ import { LoginUserController } from './use-cases/login-user/login-user.controlle
 import { LoginUserService } from './use-cases/login-user/login-user.service';
 import { JwtModule } from '@nestjs/jwt';
 // import { MongooseDatabaseModule } from '../../repositories/implementations/mongoose/mongoose-database.module';
-import { PrismaDatabaseModule } from 'src/repositories/implementations/prisma/prisma-database.module';
+import { PrismaDatabaseModule } from '../../repositories/implementations/prisma/prisma-database.module';
 
 // OBS: O JwtModule TEM que ser Async, porque se não for NÃO carrega as Variáveis de Ambiente !!!
 

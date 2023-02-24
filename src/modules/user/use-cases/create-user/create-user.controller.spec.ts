@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';
 import { UserModule } from '../../user.module';
-import { InMemoryDbModule } from '../../../../modules/in-memory-database/in-memory-database.module';
+import { InMemoryDbModule } from '../../../../modules/test/in-memory-database/in-memory-database.module';
 import { CreateUserService } from './create-user.service';
 import { CreateUserDTO } from './dtos/CreateUserDTO';
 import { IUser } from 'src/models/IUser';
