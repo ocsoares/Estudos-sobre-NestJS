@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 export interface IReturnTransaction {
     readonly account_id: string;
     readonly transfer_id?: string;

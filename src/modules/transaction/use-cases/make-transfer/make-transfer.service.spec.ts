@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { ITransaction } from 'src/models/ITransaction';
 import { UserRepository } from '../../../../repositories/abstracts/UserRepository';

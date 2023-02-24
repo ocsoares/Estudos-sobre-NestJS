@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+
 
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { IReturnPayable } from '../../../../interfaces/IReturnPayable';

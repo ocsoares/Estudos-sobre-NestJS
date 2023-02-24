@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';

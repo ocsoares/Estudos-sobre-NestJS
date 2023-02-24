@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 export interface IReturnTransfer {
     readonly date?: Date;
     readonly transfer_amount: number;
