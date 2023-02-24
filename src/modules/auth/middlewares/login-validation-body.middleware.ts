@@ -7,6 +7,8 @@ import { NextFunction, Request, Response } from 'express';
 import { LoginRequestBody } from '../models/LoginRequestBody';
 import { validate } from 'class-validator';
 
+// Esse Middleware é usado em AuthModule !!!
+
 @Injectable()
 export class LoginValidationBodyMiddleware implements NestMiddleware {
     async use(req: Request, res: Response, next: NextFunction) {
@@ -25,6 +27,14 @@ export class LoginValidationBodyMiddleware implements NestMiddleware {
                     return [...acc, ...Object.values(curr.constraints)];
                 }, []),
             );
+        }
+
+        if (body.email && body.password) {
+            if (Object.keys(body).length >= 3) {
+                throw new BadRequestException([
+                    'just the properties email and password should exist',
+                ]);
+            }
         }
 
         next();
