@@ -65,7 +65,11 @@
                 "selector": "property",
                 "format": ["camelCase", "UPPER_CASE", "snake_case"],
                 "leadingUnderscore": "allow",
-                "trailingUnderscore": "allow"
+                "trailingUnderscore": "allow",
+                "filter": {
+                    "regex": "^(__v)$",
+                    "match": false
+                }                  
             },
             {
                 "selector": "memberLike",
