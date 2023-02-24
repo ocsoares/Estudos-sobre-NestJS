@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { IPayable } from 'src/models/IPayable';
 import { PayablesRepository } from 'src/repositories/abstracts/PayablesRepository';
 import { PrismaService } from '../prisma-client.service';
 import { Prisma, Status } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 
 class PrismaPayables implements Prisma.PayablesUncheckedCreateInput {
     id?: string;
@@ -17,6 +16,7 @@ class PrismaPayables implements Prisma.PayablesUncheckedCreateInput {
     updatedAt?: string | Date;
 }
 
+@Injectable()
 export class PrismaPayablesRepository implements PayablesRepository {
     constructor(private readonly _prismaService: PrismaService) {}
 

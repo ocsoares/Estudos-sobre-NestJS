@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { TransactionRepository } from '../../../../repositories/abstracts/TransactionRepository';

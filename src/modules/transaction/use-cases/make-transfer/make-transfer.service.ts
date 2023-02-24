@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { IService } from 'src/interfaces/IService';
 import { ITransaction } from 'src/models/ITransaction';
@@ -35,8 +33,11 @@ export class MakeTransferService implements IService {
         );
         const lastForDigitsCard = card_number.slice(12, 16);
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { card_expiration_date, cvv, ...createData } = data;
+
         const makeTransfer = await this._makeTransferRepository.create({
-            ...data,
+            ...createData,
             transfer_amount: fixTransferAmountTwoDecimalPlaces,
             card_number: `...-${lastForDigitsCard}`,
         });

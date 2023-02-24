@@ -36,7 +36,7 @@ model Transaction {
     account_id      String
     transfer_id     String // Linkar com o PRÓPRIO id do Transaction...
     date            DateTime      @default(now())
-    transfer_amount Int
+    transfer_amount Float
     description     String
     payment_method  PaymentMethod
     card_number     String        @db.VarChar(8)
@@ -57,7 +57,7 @@ model Payables {
     account         User     @relation(fields: [account_id], references: [id])
     account_id      String
     transfer_id     String
-    transfer_amount Int
+    transfer_amount Float
     description     String
     status          Status
     payment_date    DateTime

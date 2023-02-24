@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { Body, Controller, Post } from '@nestjs/common';
 import { IController, returnHandle } from 'src/interfaces/IController';
 import { IReturnUser } from 'src/interfaces/IReturnUser';

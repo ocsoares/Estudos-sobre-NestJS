@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { PayablesRepository } from 'src/repositories/abstracts/PayablesRepository';
 import { TransactionRepository } from 'src/repositories/abstracts/TransactionRepository';
 import { UserRepository } from 'src/repositories/abstracts/UserRepository';
+import { PrismaPayablesRepository } from './payables/PrismaPayablesRepository';
 import { PrismaService } from './prisma-client.service';
+import { PrismaTransactionRepository } from './transaction/PrismaTransactionRepository';
 import { PrismaUserRepository } from './user/PrismaUserRepository';
 
 @Module({
@@ -13,15 +15,15 @@ import { PrismaUserRepository } from './user/PrismaUserRepository';
             provide: UserRepository,
             useClass: PrismaUserRepository,
         },
-        // {
-        //     provide: PayablesRepository,
-        //     useClass: MongoosePayablesRepository,
-        // },
-        // {
-        //     provide: TransactionRepository,
-        //     useClass: MongooseTransactionRepository,
-        // },
+        {
+            provide: PayablesRepository,
+            useClass: PrismaPayablesRepository,
+        },
+        {
+            provide: TransactionRepository,
+            useClass: PrismaTransactionRepository,
+        },
     ],
-    exports: [UserRepository],
+    exports: [UserRepository, PayablesRepository, TransactionRepository],
 })
 export class PrismaDatabaseModule {}

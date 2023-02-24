@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { MongooseDatabaseModule } from '../../repositories/implementations/mongoose/mongoose-database.module';
+import { PrismaDatabaseModule } from 'src/repositories/implementations/prisma/prisma-database.module';
+// import { MongooseDatabaseModule } from '../../repositories/implementations/mongoose/mongoose-database.module';
 import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
 import { LoginValidationBodyMiddleware } from './middlewares/login-validation-body.middleware';
@@ -7,7 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
-    imports: [UserModule, MongooseDatabaseModule],
+    imports: [UserModule, PrismaDatabaseModule],
     providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule implements NestModule {

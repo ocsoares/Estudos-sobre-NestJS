@@ -6,10 +6,11 @@ import { ShowAllAccountTransactionsService } from './use-cases/show-all-account-
 import { PayablesModule } from '../payables/payables.module';
 import { GenerateCreditCardPayableService } from '../payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
 import { GenerateDebitCardPayableService } from '../payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
-import { MongooseDatabaseModule } from '../../repositories/implementations/mongoose/mongoose-database.module';
+// import { MongooseDatabaseModule } from '../../repositories/implementations/mongoose/mongoose-database.module';
+import { PrismaDatabaseModule } from 'src/repositories/implementations/prisma/prisma-database.module';
 
 @Module({
-    imports: [MongooseDatabaseModule, PayablesModule],
+    imports: [PrismaDatabaseModule, PayablesModule],
     controllers: [MakeTransferController, ShowAllAccountTransactionsController],
     providers: [
         MakeTransferService,
