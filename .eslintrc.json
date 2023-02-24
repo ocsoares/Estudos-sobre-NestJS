@@ -67,7 +67,7 @@
                 "leadingUnderscore": "allow",
                 "trailingUnderscore": "allow",
                 "filter": {
-                    "regex": "^(__v)$",
+                    "regex": "^(__v)$", // PERMITE o uso da Propriedade de nome __v !!! <<<
                     "match": false
                 }                  
             },
