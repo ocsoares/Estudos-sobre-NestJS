@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { PayablesRepository } from '../../../repositories/abstracts/PayablesRepository';
 import { TransactionRepository } from '../../../repositories/abstracts/TransactionRepository';
 import { UserRepository } from '../../../repositories/abstracts/UserRepository';
@@ -7,8 +7,8 @@ import { PrismaService } from './prisma-client.service';
 import { PrismaTransactionRepository } from './transaction/PrismaTransactionRepository';
 import { PrismaUserRepository } from './user/PrismaUserRepository';
 
+@Global() // Torna esse Módulo GLOBAL, ou seja, quando Importado em QUALQUER LUGAR, importa para TODOS !!!
 @Module({
-    imports: [],
     providers: [
         PrismaService,
         {

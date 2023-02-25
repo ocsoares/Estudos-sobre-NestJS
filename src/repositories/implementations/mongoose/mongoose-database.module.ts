@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PayablesRepository } from '../../../repositories/abstracts/PayablesRepository';
 import { TransactionRepository } from '../../../repositories/abstracts/TransactionRepository';
@@ -10,11 +11,11 @@ import { User, UserSchema } from './schemas/user.schema';
 import { MongooseTransactionRepository } from './transaction/MongooseTransactionRepository';
 import { MongooseUserRepository } from './user/MongooseUserRepository';
 
+@Global() // Torna esse Módulo GLOBAL, ou seja, quando Importado em QUALQUER LUGAR, importa para TODOS !!!
 @Module({
     imports: [
-        // NÃO coloquei a conexão do Mongoose aqui porque como esse Módulo está importado DENTRO dos
-        // Módulos da Aplicação (User, Transation, etc...) isso iria fazer com que os Testes Conectassem
-        // NESSE Banco de Dados AQUI, ao invés do In Memory !!!
+        ConfigModule.forRoot(), // Ativa as Variáveis de Ambiente DEFAULT (sem nada nos ()) !!
+        MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
         MongooseModule.forFeature([
             { name: Transaction.name, schema: TransactionSchema },

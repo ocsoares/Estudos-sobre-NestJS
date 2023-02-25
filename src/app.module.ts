@@ -7,7 +7,12 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PayablesModule } from './modules/payables/payables.module';
 import { LoginValidationBodyModule } from './modules/login-validation-body/login-validation-body.module';
-// import { MongooseModule } from '@nestjs/mongoose';
+import { PrismaDatabaseModule } from './repositories/implementations/prisma/prisma-database.module';
+// import { MongooseDatabaseModule } from './repositories/implementations/mongoose/mongoose-database.module';
+
+// IMPORTANTE: Como os Módulos de Banco de Dados são GLOBAIS, só vão funcionar FORA DOS TESTES, porque nos
+// Testes cria-se um módulo PRÓPRIO para Testes, logo NÃO VAI funcionar neles, então deve-se Importar o
+// Banco de Dados em CADA TESTE !!! <<<
 
 @Module({
     imports: [
@@ -15,11 +20,7 @@ import { LoginValidationBodyModule } from './modules/login-validation-body/login
             isGlobal: true,
             envFilePath: '.env',
         }),
-        // Conexão do Banco de Dados aqui porque no Módulo do Mongoose iria fazer com que os Testes
-        // Conectassem no Banco de Dados REAL ao invés do In Memory !!!
-        // OBS: Está comentado porque estou usando o Prisma, para testar a Implementação de OUTRO
-        // Banco de Dados !!
-        // MongooseModule.forRoot(process.env.ATLAS_URL_CONNECTION),
+        PrismaDatabaseModule,
         UserModule,
         AuthModule,
         TransactionModule,
