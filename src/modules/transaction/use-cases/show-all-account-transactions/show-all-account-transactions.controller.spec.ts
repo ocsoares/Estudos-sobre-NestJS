@@ -5,8 +5,6 @@ import { UserRepository } from '../../../../repositories/abstracts/UserRepositor
 import { ShowAllAccountTransactionsService } from './show-all-account-transactions.service';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { TransactionModule } from '../../transaction.module';
-import { MongooseInMemoryDatabaseModule } from '../../../test/mongoose-in-memory-database.module';
 import { JwtStrategy } from '../../../../modules/auth/strategies/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../../../../modules/auth/guards/jwt-auth.guard';
@@ -15,7 +13,7 @@ import * as supertest from 'supertest';
 import { IUser } from 'src/models/IUser';
 import { ITransaction } from 'src/models/ITransaction';
 import { IReturnTransfer } from '../make-transfer/interfaces/IReturnTransfer';
-import { PayablesModule } from '../../../../modules/payables/payables.module';
+import { TestDependenciesModule } from '../../../../modules/test/test-dependencies.module';
 
 describe('ShowAllAccountTransactionsController', () => {
     let app: INestApplication;
@@ -75,9 +73,9 @@ describe('ShowAllAccountTransactionsController', () => {
                 // no código do seu módulo de PayablesModule, e mesmo NÃO usando as suas funcionalidades, PRECISA IMPORTAR !!!
                 // OBS: A ordem de Importação IMPORTA, o Módulo que o outro módulo depende PRECISA vir PRIMEIRO, nesse caso,
                 // TransactionModule depende de PayablesModule, então PayablesModule VEM PRIMEIRO !!!
-                PayablesModule,
-                TransactionModule,
-                MongooseInMemoryDatabaseModule,
+                // IMPORTANTE: Coloquei TODOS os Módulos e suas Dependências no Módulo ABAIXO, mas fica de Lembrete os Comentá-
+                // rios acima !!! <<<
+                TestDependenciesModule,
             ],
             providers: [
                 JwtStrategy,

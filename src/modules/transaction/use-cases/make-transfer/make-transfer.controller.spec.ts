@@ -6,7 +6,6 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../../modules/auth/guards/jwt-auth.guard';
 import { JwtStrategy } from '../../../../modules/auth/strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
-import { MongooseInMemoryDatabaseModule } from '../../../test/mongoose-in-memory-database.module';
 import { APP_GUARD } from '@nestjs/core';
 import { MakeTransferDTO } from './dtos/MakeTransferDTO';
 import { JwtModule, JwtService } from '@nestjs/jwt';
@@ -16,9 +15,8 @@ import { UserRepository } from '../../../../repositories/abstracts/UserRepositor
 import { IUser } from 'src/models/IUser';
 import { GenerateCreditCardPayableService } from '../../../../modules/payables/use-cases/generate-credit-card-payable/generate-credit-card-payable.service';
 import { GenerateDebitCardPayableService } from '../../../../modules/payables/use-cases/generate-debit-card-payable/generate-debit-card-payable.service';
-import { PayablesModule } from '../../../../modules/payables/payables.module';
 import { Types } from 'mongoose';
-import { TransactionModule } from '../../transaction.module';
+import { TestDependenciesModule } from '../../../../modules/test/test-dependencies.module';
 
 // IMPORTANTE: NÃO consegui mockar o PostgreSQL porque ele NÃO TEM suporte a In Memory, então quando
 // for testar, MUDAR os Módulos do use-case para Mongoose !!! <<<<<<<<<
@@ -90,9 +88,9 @@ describe('MakeTransferController', () => {
                 // TransactionModule depende de PayablesModule, então PayablesModule VEM PRIMEIRO !!!
                 // OBS: Nesse teste, tive que adicionar os Services e Repositorys JÁ IMPORTADOS de PayablesModules para o
                 // TransactionModule (está comentado lá explicando) para que os Métodos parassem de NÃO serem Chamados !!!
-                PayablesModule,
-                TransactionModule,
-                MongooseInMemoryDatabaseModule,
+                // IMPORTANTE: Coloquei TODOS os Módulos e suas Dependências no Módulo ABAIXO, mas fica de Lembrete os Comentá-
+                // rios acima !!! <<<
+                TestDependenciesModule,
             ],
             providers: [
                 JwtStrategy,
