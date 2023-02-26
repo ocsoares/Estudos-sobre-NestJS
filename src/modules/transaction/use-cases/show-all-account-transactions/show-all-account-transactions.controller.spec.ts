@@ -6,7 +6,7 @@ import { ShowAllAccountTransactionsService } from './show-all-account-transactio
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TransactionModule } from '../../transaction.module';
-import { InMemoryDbModule } from '../../../../modules/test/in-memory-database/in-memory-database.module';
+import { MongooseInMemoryDatabaseModule } from '../../../test/mongoose-in-memory-database.module';
 import { JwtStrategy } from '../../../../modules/auth/strategies/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../../../../modules/auth/guards/jwt-auth.guard';
@@ -77,7 +77,7 @@ describe('ShowAllAccountTransactionsController', () => {
                 // TransactionModule depende de PayablesModule, então PayablesModule VEM PRIMEIRO !!!
                 PayablesModule,
                 TransactionModule,
-                InMemoryDbModule,
+                MongooseInMemoryDatabaseModule,
             ],
             providers: [
                 JwtStrategy,

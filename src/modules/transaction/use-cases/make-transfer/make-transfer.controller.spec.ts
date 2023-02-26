@@ -6,7 +6,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../../modules/auth/guards/jwt-auth.guard';
 import { JwtStrategy } from '../../../../modules/auth/strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
-import { InMemoryDbModule } from '../../../../modules/test/in-memory-database/in-memory-database.module';
+import { MongooseInMemoryDatabaseModule } from '../../../test/mongoose-in-memory-database.module';
 import { APP_GUARD } from '@nestjs/core';
 import { MakeTransferDTO } from './dtos/MakeTransferDTO';
 import { JwtModule, JwtService } from '@nestjs/jwt';
@@ -92,7 +92,7 @@ describe('MakeTransferController', () => {
                 // TransactionModule (está comentado lá explicando) para que os Métodos parassem de NÃO serem Chamados !!!
                 PayablesModule,
                 TransactionModule,
-                InMemoryDbModule,
+                MongooseInMemoryDatabaseModule,
             ],
             providers: [
                 JwtStrategy,

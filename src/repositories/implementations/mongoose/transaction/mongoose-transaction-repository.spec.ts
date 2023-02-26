@@ -2,7 +2,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
 import { ITransaction } from 'src/models/ITransaction';
-import { InMemoryDbModule } from '../../../../modules/test/in-memory-database/in-memory-database.module';
+import { MongooseInMemoryDatabaseModule } from '../../../../modules/test/mongoose-in-memory-database.module';
 import { Transaction, TransactionSchema } from '../schemas/transaction.schema';
 import { MongooseTransactionRepository } from './MongooseTransactionRepository';
 
@@ -43,7 +43,7 @@ describe('MongooseTransactionRepository', () => {
     beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [
-                InMemoryDbModule,
+                MongooseInMemoryDatabaseModule,
                 MongooseModule.forFeature([
                     { name: Transaction.name, schema: TransactionSchema },
                 ]),

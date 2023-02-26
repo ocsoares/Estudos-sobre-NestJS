@@ -16,4 +16,4 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
         }),
     ],
 })
-export class InMemoryDbModule {}
+export class MongooseInMemoryDatabaseModule {}
